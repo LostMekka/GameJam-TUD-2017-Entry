@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,17 +8,20 @@ public class Map : MonoBehaviour
 	public float TileDistance = 1f;
 	public GameObject TilePrefab;
 
-	// Use this for initialization
+	private Dictionary<int, GameObject> tiles = new Dictionary<int, GameObject>();
+	private const int MaxMapSize = 9999;
+	
 	void Start()
 	{
 		GenerateNewMap();
 	}
 
-	// Update is called once per frame
-	void Update()
+	public GameObject this[int x, int y]
 	{
+		get { return tiles[x + y * MaxMapSize]; }
+		set { tiles[x + y * MaxMapSize] = value; }
 	}
-
+	
 	public void GenerateNewMap()
 	{
 		for (int y = 0; y < GeneratedSize; y++)
@@ -28,6 +30,7 @@ public class Map : MonoBehaviour
 			{
 				GameObject tile = Instantiate(TilePrefab);
 				tile.transform.position = GetTilePosition(x, y);
+				this[x, y] = tile;
 			}
 		}
 	}
