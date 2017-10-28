@@ -27,8 +27,8 @@ public class GameController : MonoBehaviour
 		}
 	}
 
-
 	public Map Map;
+
 
 	private readonly List<Character> registeredCharacters = new List<Character>();
 	private State state = State.Input;

@@ -11,12 +11,26 @@ public class Map : MonoBehaviour
 	public float TileBaseHeight = -0.2f;
 	public GameObject FloorTilePrefab;
 	public GameObject WallTilePrefab;
+	public GameObject PlayerPrefab;
 
+	public GameObject player = null;
+	
 	private readonly Dictionary<int, TileInfo> tiles = new Dictionary<int, TileInfo>();
 	private readonly float hexInnerRadiusMultiplier = (float) Math.Sqrt(3) / 2f;
 	private const int MaxMapSize = 9999;
 
-	void Start() { GenerateNewMap(); }
+	void Start()
+	{
+		GenerateNewMap();
+		
+		// gen player
+		player = Instantiate(PlayerPrefab);
+		var character = player.GetComponentInChildren<Character>();
+			
+		character.OccupiedTile = this[3, 4];
+		character.gameObject.AddComponent<ControllerInput>().character = character;
+		character.gameObject.GetComponent<ControllerInput>().map = this;
+	}
 
 	public TileInfo this[int x, int y]
 	{
