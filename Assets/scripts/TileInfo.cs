@@ -9,7 +9,7 @@ public class TileInfo : MonoBehaviour
 	public int Y;
 
 	// TODO: reference main scripts instead of game objects here
-	public GameObject CharacterStandingThere;
+	public Character CharacterStandingThere;
 	public GameObject PickupLyingThere;
 
 	public List<TileInfo> Neighbours

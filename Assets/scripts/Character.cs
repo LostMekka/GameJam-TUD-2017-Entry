@@ -6,7 +6,7 @@ public class Character : MonoBehaviour {
 
     public int unitHealth = 100;
     public int unitStamina = 100;
-    public Object tileInfo;
+    public TileInfo CurrentTile;
     public int unitSize = 1;
     public string unitAction = "idle";
     public Dictionary<string, string> skillList = new Dictionary<string, string>();
