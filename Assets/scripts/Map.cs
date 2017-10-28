@@ -32,6 +32,7 @@ public class Map : MonoBehaviour
 		var controllerInput = Player.gameObject.AddComponent<ControllerInput>();
 		controllerInput.Character = Player;
 		controllerInput.Map = this;
+		controllerInput.GameController = GameController;
 	}
 
 	public TileInfo this[int x, int y]

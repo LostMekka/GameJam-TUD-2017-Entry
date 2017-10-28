@@ -8,17 +8,27 @@ public class Character : MonoBehaviour
 	public int Stamina;
 	public int MaxStamina = 100;
 
-	public Action CurrentAction;
-	public int Direction;
+	public ActionSequence CurrentActionSequence;
 	public TileInfo OccupiedTile;
 	public bool InAnimation;
 
 	public float ModelScale = 1;
 	public GameObject ModelPrefab;
 	public GameObject OutermostGameObject;
+	private int direction;
 
 
-	public string CurrentActionName { get { return CurrentAction.Name; } }
+	public int Direction
+	{
+		get { return direction; }
+		set
+		{
+			direction = (value % 6 + 6) % 6;
+			model.transform.eulerAngles = new Vector3(0, (90 + 360 - direction * 60) % 360, 0);
+		}
+	}
+
+	public string CurrentActionSequenceName { get { return CurrentActionSequence.Name; } }
 	public bool IsDead { get { return Health <= 0; } }
 
 
@@ -44,31 +54,35 @@ public class Character : MonoBehaviour
 
 	public void StartTurnAnimation()
 	{
-		animator.SetTrigger(GetAnimationNameForActionType(CurrentAction.CurrentTurnActionAtom.Type));
-		InAnimation = true;
+		// TODO STEVE: fix animations
+//		animator.SetTrigger(GetAnimationNameForActionType(CurrentActionSequence.CurrentTurnActionAtom.Type));
+//		InAnimation = true;
 	}
 
 	public void StartHitAnimation()
 	{
 		// TODO: trigger hit animation instead of idle
-		animator.SetTrigger("unitIdle");
-		InAnimation = true;
+//		animator.SetTrigger("unitIdle");
+//		InAnimation = true;
 	}
 
 	public void GoToNextActionAtom()
 	{
-		CurrentAction.Tick();
-		if (CurrentAction.IsDone) CurrentAction = new Action(ActionDefinition.Idle);
+		CurrentActionSequence.Tick();
+		if (CurrentActionSequence.IsDone) CurrentActionSequence = new ActionSequence(ActionDefinition.Idle);
 	}
 
 	public void DealDamage(int amount) { Health -= amount; }
 	public void Heal(int amount) { Health += amount; }
 
-	public void MoveToTile(TileInfo tile)
+	public bool MoveToTile(TileInfo tile)
 	{
+		if (tile.CharacterStandingThere != null || !tile.IsWalkable) return false;
 		OccupiedTile.CharacterStandingThere = null;
 		tile.CharacterStandingThere = this;
 		OccupiedTile = tile;
+		OutermostGameObject.transform.position = tile.GlobalMidpointPosition;
+		return true;
 	}
 
 	private string GetAnimationNameForActionType(ActionType type)

@@ -33,6 +33,7 @@ public class GameController : MonoBehaviour
 	private State state = State.Input;
 
 
+	public bool AllowsInput { get { return state == State.Input; } }
 	private bool EveryCharacterIsIdle { get { return registeredCharacters.All(c => !c.InAnimation); } }
 
 
@@ -46,7 +47,9 @@ public class GameController : MonoBehaviour
 			case State.TurnAnimations:
 				if (EveryCharacterIsIdle)
 				{
+					Debug.Log("game controller starts state calculation");
 					var charactersHit = CalculateNextGameState();
+					Debug.Log("game controller starts hit animations");
 					foreach (var character in charactersHit)
 					{
 						character.GoToNextActionAtom();
@@ -58,6 +61,7 @@ public class GameController : MonoBehaviour
 			case State.HitAnimations:
 				if (EveryCharacterIsIdle)
 				{
+					Debug.Log("game controller starts input phase");
 					state = State.Input;
 					// TODO: inform input scripts or something like that??
 				}
@@ -89,6 +93,7 @@ public class GameController : MonoBehaviour
 		character.OutermostGameObject = instance;
 		instance.transform.SetParent(Map.transform);
 		instance.transform.position = targetTile.GlobalMidpointPosition;
+		registeredCharacters.Add(character);
 		return character;
 	}
 
@@ -100,7 +105,7 @@ public class GameController : MonoBehaviour
 		{
 			// TODO: get this from character
 			var damageAmount = 1;
-			switch (character.CurrentAction.CurrentTurnActionAtom.Type)
+			switch (character.CurrentActionSequence.CurrentTurnActionAtom.Type)
 			{
 				case ActionType.AttackSingleTile:
 					AddDamageEvent(character, new[] {0}, damageAmount, damageEvents);
@@ -120,11 +125,13 @@ public class GameController : MonoBehaviour
 		var damagedCharacters = new List<Character>();
 		foreach (var character in registeredCharacters)
 		{
-			var atom = character.CurrentAction.CurrentTurnActionAtom;
+			var atom = character.CurrentActionSequence.CurrentTurnActionAtom;
 			var currTile = character.OccupiedTile;
 			var moveTarget = atom.Type == ActionType.Move || atom.Type == ActionType.Roll
 				? Map.GetTileInDirection(currTile, character.Direction + atom.DirectionOffset)
 				: null;
+			Debug.Log("name: " + character.CurrentActionSequenceName);
+			Debug.Log(moveTarget == null ? "target: null" : "target: " + moveTarget.X + ", " + moveTarget.Y);
 			if (moveTarget != null) character.MoveToTile(moveTarget);
 
 			var damageTaken = 0;
@@ -176,7 +183,16 @@ public class GameController : MonoBehaviour
 
 	public void ExecuteNextTurn()
 	{
-		foreach (var character in registeredCharacters) character.StartTurnAnimation();
+		Debug.Log("game controller starts turn animations");
+		foreach (var character in registeredCharacters)
+		{
+			var actionSequence = character.CurrentActionSequence;
+			if (actionSequence.DirectionOverride != null && actionSequence.CurrentTurnIndex == 0)
+			{
+				character.Direction = actionSequence.DirectionOverride.Value;
+			}
+			character.StartTurnAnimation();
+		}
 		state = State.TurnAnimations;
 	}
 }

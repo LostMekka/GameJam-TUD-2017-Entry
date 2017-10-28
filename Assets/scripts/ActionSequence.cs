@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Action
+public class ActionSequence
 {
 	public readonly ActionDefinition Definition;
+	public readonly int? DirectionOverride;
+	private int currentTurnIndex;
+
 
 	public int CurrentTurnIndex { get { return IsDone ? -1 : currentTurnIndex; } }
 
@@ -16,9 +19,12 @@ public class Action
 
 	public bool CanLoop { get { return Definition.LoopsWithoutInput; } }
 
-	private int currentTurnIndex;
 
-	public Action(ActionDefinition definition) { Definition = definition; }
+	public ActionSequence(ActionDefinition definition, int? directionOverride = null)
+	{
+		Definition = definition;
+		DirectionOverride = directionOverride;
+	}
 
 	public void Tick()
 	{

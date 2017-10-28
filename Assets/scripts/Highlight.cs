@@ -3,35 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Highlight : MonoBehaviour {
+public class Highlight : MonoBehaviour
+{
+	private readonly Color mouseOverColor = Color.blue;
+	private Color originalColor;
+	private MeshRenderer meshRenderer;
 
-	//When the mouse hovers over the GameObject, it turns to this color (red)
-	Color m_MouseOverColor = Color.blue;
-	//This stores the GameObject’s original color
-	Color m_OriginalColor;
-	//Get the GameObject’s mesh renderer to access the GameObject’s material and color
-	MeshRenderer m_Renderer;
-
-	void Update()
+	public void Start()
 	{
+		meshRenderer = GetComponentInChildren<MeshRenderer>();
+		originalColor = meshRenderer.material.color;
 	}
 
-	void Start()
-	{
-		//Fetch the mesh renderer component from the GameObject
-		m_Renderer = GetComponentInChildren<MeshRenderer>();
-		//Fetch the original color of the GameObject
-		m_OriginalColor = m_Renderer.material.color;
-	}
+	public void OnMouseEnter() { meshRenderer.material.color = mouseOverColor; }
 
-	void OnMouseOver()
-	{
-		m_Renderer.material.color = m_MouseOverColor;
-		Debug.Log("Mouse is over GameObject.");
-	}
-
-	void OnMouseExit()
-	{
-		m_Renderer.material.color = m_OriginalColor;
-	}
+	public void OnMouseExit() { meshRenderer.material.color = originalColor; }
 }
