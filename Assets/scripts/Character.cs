@@ -5,8 +5,10 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
 	public Action CurrentAction;
-	public int Health = 100;
-	public int Stamina = 100;
+	public int Health;
+	public int MaxHealth = 100;
+	public int Stamina;
+	public int MaxStamina = 100;
 	public TileInfo OccupiedTile;
 	public float ModelScale = 1;
 	public GameObject ModelPrefab;
@@ -28,6 +30,9 @@ public class Character : MonoBehaviour
 		model = Instantiate(ModelPrefab);
 		model.transform.localScale = new Vector3(ModelScale, ModelScale, ModelScale);
 		model.transform.parent = gameObject.transform;
+
+		Health = MaxHealth;
+		Stamina = MaxStamina;
 	}
 
 	// Update is called once per frame

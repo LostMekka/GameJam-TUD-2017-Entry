@@ -135,9 +135,9 @@ GameObject:
   - component: {fileID: 223654430987782614}
   - component: {fileID: 114804489859284180}
   - component: {fileID: 114164731745372610}
-  - component: {fileID: 114809780203753774}
+  - component: {fileID: 114754732147732046}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: HUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -487,6 +487,17 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Turns
+--- !u!114 &114754732147732046
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1460008454969812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e717d0c7d521284f83bd9e46b803c17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114804489859284180
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -508,18 +519,6 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
---- !u!114 &114809780203753774
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1460008454969812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d931682434db294f886c787e93924ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mob: {fileID: 0}
 --- !u!114 &114843391129731826
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -589,7 +588,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 0.536
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -637,7 +636,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 0.453
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -830,7 +829,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1460008454969812}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 0.5624849, y: 0.5784665, z: 1}
   m_Children:
   - {fileID: 224364812791703332}
@@ -842,7 +841,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 3}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224602941889156754
