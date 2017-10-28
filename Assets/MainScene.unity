@@ -142,6 +142,7 @@ MonoBehaviour:
   GeneratedSize: 10
   TileDistance: 1.8
   WallProbability: 0.1
+  TileBaseHeight: -0.2
   FloorTilePrefab: {fileID: 1398303663365326, guid: c65827955a864654f8e3ac3bf909ab85,
     type: 2}
   WallTilePrefab: {fileID: 1025289075216762, guid: 22c1864d9b7c08a418877ebbda32a8f3,
