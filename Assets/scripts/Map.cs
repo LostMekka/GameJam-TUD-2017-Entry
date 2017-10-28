@@ -11,7 +11,7 @@ public class Map : MonoBehaviour
 	public GameObject FloorTilePrefab;
 	public GameObject WallTilePrefab;
 
-	private readonly Dictionary<int, GameObject> tiles = new Dictionary<int, GameObject>();
+	private readonly Dictionary<int, TileInfo> tiles = new Dictionary<int, TileInfo>();
 	private const int MaxMapSize = 9999;
 
 	void Start()
@@ -19,11 +19,11 @@ public class Map : MonoBehaviour
 		GenerateNewMap();
 	}
 
-	public GameObject this[int x, int y]
+	public TileInfo this[int x, int y]
 	{
 		get
 		{
-			GameObject tile;
+			TileInfo tile;
 			tiles.TryGetValue(x + y * MaxMapSize, out tile);
 			return tile;
 		}
@@ -32,17 +32,17 @@ public class Map : MonoBehaviour
 
 	public void GenerateNewMap()
 	{
-		for (int y = 0; y < GeneratedSize; y++)
+		for (var y = 0; y < GeneratedSize; y++)
 		{
-			for (int x = 0; x < GeneratedSize; x++)
+			for (var x = 0; x < GeneratedSize; x++)
 			{
-				GameObject prefab = UnityEngine.Random.value < WallProbability
+				var prefab = UnityEngine.Random.value < WallProbability
 					? WallTilePrefab
 					: FloorTilePrefab;
-				GameObject tile = Instantiate(prefab);
+				var tile = Instantiate(prefab);
 				tile.transform.position = GetTilePosition(x, y);
-				this[x, y] = tile;
 				var tileInfo = tile.GetComponent<TileInfo>();
+				this[x, y] = tileInfo;
 				tileInfo.x = x;
 				tileInfo.y = y;
 			}
@@ -52,9 +52,8 @@ public class Map : MonoBehaviour
 
 	public void CreateTileLinks()
 	{
-		foreach (GameObject tile in tiles.Values)
+		foreach (var tileInfo in tiles.Values)
 		{
-			var tileInfo = tile.GetComponent<TileInfo>();
 			var x = tileInfo.x;
 			var y = tileInfo.y;
 			var o = tileInfo.y % 2 * 2 - 1;
@@ -67,11 +66,9 @@ public class Map : MonoBehaviour
 		}
 	}
 
-	private static void Link(TileInfo source, GameObject target)
+	private static void Link(TileInfo source, TileInfo target)
 	{
-		if (source == null || target == null) return;
-		var targetInfo = target.GetComponent<TileInfo>();
-		if (targetInfo != null) source.Neighbours.Add(targetInfo);
+		if (source != null && target != null) source.Neighbours.Add(target);
 	}
 
 	private Vector3 GetTilePosition(int x, int y)
