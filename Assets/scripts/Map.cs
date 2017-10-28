@@ -43,8 +43,8 @@ public class Map : MonoBehaviour
 				tile.transform.position = GetTilePosition(x, y);
 				var tileInfo = tile.GetComponent<TileInfo>();
 				this[x, y] = tileInfo;
-				tileInfo.x = x;
-				tileInfo.y = y;
+				tileInfo.X = x;
+				tileInfo.Y = y;
 			}
 		}
 		CreateTileLinks();
@@ -54,9 +54,9 @@ public class Map : MonoBehaviour
 	{
 		foreach (var tileInfo in tiles.Values)
 		{
-			var x = tileInfo.x;
-			var y = tileInfo.y;
-			var o = tileInfo.y % 2 * 2 - 1;
+			var x = tileInfo.X;
+			var y = tileInfo.Y;
+			var o = tileInfo.Y % 2 * 2 - 1;
 			Link(tileInfo, this[x + 1, y + 0]);
 			Link(tileInfo, this[x - 1, y + 0]);
 			Link(tileInfo, this[x + 0, y + 1]);
