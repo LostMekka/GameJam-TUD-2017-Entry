@@ -38,6 +38,8 @@ GameObject:
   - component: {fileID: 33861277225461254}
   - component: {fileID: 23907436996749338}
   - component: {fileID: 95146781680143562}
+  - component: {fileID: 64170706251290620}
+  - component: {fileID: 114549072886153304}
   m_Layer: 0
   m_Name: WallTile2
   m_TagString: Untagged
@@ -113,6 +115,20 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1655766448611532}
   m_Mesh: {fileID: 4300000, guid: 8ea63dd0c7a99e44080b4da574e8f78c, type: 3}
+--- !u!64 &64170706251290620
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1655766448611532}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 1
+  m_InflateMesh: 0
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: 8ea63dd0c7a99e44080b4da574e8f78c, type: 3}
 --- !u!95 &95146781680143562
 Animator:
   serializedVersion: 3
@@ -146,3 +162,14 @@ MonoBehaviour:
   Y: 0
   CharacterStandingThere: {fileID: 0}
   PickupLyingThere: {fileID: 0}
+--- !u!114 &114549072886153304
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1655766448611532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58258823d96007548b701252dcb2dd74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
