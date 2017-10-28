@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitScript : MonoBehaviour {
+public class Character : MonoBehaviour {
 
     public int unitHealth = 100;
     public int unitStamina = 100;
