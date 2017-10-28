@@ -1,51 +1,50 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using NUnit.Framework.Constraints;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.WSA;
 
 public class TileInfo : MonoBehaviour
 {
 	public bool IsWalkable = true;
 	public int X;
 	public int Y;
+	public Character CharacterStandingThere;
 
-	public enum TileState
+	private Color defaultColor;
+	private MeshRenderer meshRenderer;
+	private readonly List<TileInfo> neighbours = new List<TileInfo>();
+
+
+	public bool Highlighted { get { return meshRenderer.material.color == defaultColor; } }
+
+
+	public List<TileInfo> Neighbours { get { return neighbours; } }
+
+	public Vector3 GlobalMidpointPosition
 	{
-		None, Next
+		get
+		{
+			var pos = transform.position;
+			pos.y = 0;
+			return pos;
+		}
 	}
 
-	public TileState tileState = TileState.None;
-	// TODO: reference main scripts instead of game objects here
-	public Character CharacterStandingThere;
-	public GameObject PickupLyingThere;
-	private Color defaultCol;
 
 	public void Start()
 	{
-		var renderer = GetComponentInChildren<MeshRenderer>();
-		defaultCol = renderer.material.color;
-	}
-	public void Select()
-	{
-		var renderer = GetComponentInChildren<MeshRenderer>();
-		if (tileState == TileState.Next) renderer.material.color = Color.green;
-		else renderer.material.color = defaultCol;
-	}
-	public List<TileInfo> Neighbours
-	{
-		get { return neighbours; }
+		meshRenderer = GetComponentInChildren<MeshRenderer>();
+		defaultColor = meshRenderer.material.color;
 	}
 
-	private readonly List<TileInfo> neighbours = new List<TileInfo>();
+	public void Highlight(Color color) { meshRenderer.material.color = color; }
+
+	public void ClearHighlight() { meshRenderer.material.color = defaultColor; }
+
+	public void ClearTileConnections() { neighbours.Clear(); }
 
 	public void ConnectToTile(TileInfo tile)
 	{
 		if (!neighbours.Contains(tile)) neighbours.Add(tile);
 	}
 
-	public void DisconnectTile(TileInfo tile)
-	{
-		neighbours.Remove(tile);
-	}
+	public void DisconnectTile(TileInfo tile) { neighbours.Remove(tile); }
 }

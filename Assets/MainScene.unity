@@ -148,8 +148,10 @@ MonoBehaviour:
     type: 2}
   WallTilePrefab: {fileID: 1025289075216762, guid: 22c1864d9b7c08a418877ebbda32a8f3,
     type: 2}
-  PlayerPrefab: {fileID: 0}
-  player: {fileID: 0}
+  PlayerPrefab: {fileID: 1395228606657764, guid: c56e5e55bef694e49ae729e45ef2dd9b,
+    type: 2}
+  GameController: {fileID: 0}
+  Player: {fileID: 0}
 --- !u!4 &128915322
 Transform:
   m_ObjectHideFlags: 0

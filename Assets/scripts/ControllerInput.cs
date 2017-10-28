@@ -1,62 +1,40 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Windows.Speech;
 
 public class ControllerInput : MonoBehaviour
 {
-	public Character character = null;
-	public Map map = null;
-	
-	private TileInfo nextTile;
-	// Use this for initialization
-	void Start () {
-//		character = gameO.GetComponent<Character>();		
-	}
-	
-	// Update is called once per frame
-	void Update ()
+	public Character Character;
+	public Map Map;
+
+	private TileInfo selectedTile;
+	private const float MinAnalogStrngth = 0.1f;
+
+
+	public void Update()
 	{
-		if ( character == null ) return;
-		
-		float horizontal = Input.GetAxis("Horizontal");
-		float vertical = Input.GetAxis("Vertical");
-		var currentTile = character.OccupiedTile;
+		if (Character == null || Map == null) throw new Exception("character or map is not initialized");
+		Unselect();
 
+		var dx = Input.GetAxis("Horizontal");
+		var dy = Input.GetAxis("Vertical");
+		if (dy * dy + dx * dx < MinAnalogStrngth * MinAnalogStrngth) return;
 
-		if (vertical * vertical + horizontal * horizontal < 0.2)
-		{
-			if (nextTile != null)
-			{
-				nextTile.tileState = TileInfo.TileState.None;
-				nextTile.Select();
-				nextTile = null;
-			}
-			return;
-		}
-		
-	//	Debug.Log("X:" + currentTile.X.ToString() + "Y: " + currentTile.Y.ToString() );
-		float angle = Mathf.Atan2(vertical, horizontal);
-	//	Debug.Log("Angle:" + angle.ToString() );
+		var angle = Mathf.Atan2(dy, dx);
+		var direction = (int) Mathf.Round(3 * angle / Mathf.PI);
+		var tile = Map.GetTileInDirection(Character.OccupiedTile, direction);
+		if (tile != null) Select(tile);
+	}
 
-		int index = (int)Mathf.Round(3 * angle/Mathf.PI);
-		Debug.Log("Index:" + index.ToString() );
+	private void Select(TileInfo tile)
+	{
+		selectedTile = tile;
+		selectedTile.Highlight(Color.green);
+	}
 
-		if (map == null) return;
-		
-		TileInfo tile = map.GetTileInDirection(character.OccupiedTile, index);
-
-		if (tile != null)
-		{
-			if (nextTile != null)
-			{
-				nextTile.tileState = TileInfo.TileState.None;
-				nextTile.Select();
-			}
-			nextTile = tile;
-			nextTile.tileState = TileInfo.TileState.Next;
-			nextTile.Select();
-		}
+	private void Unselect()
+	{
+		if (selectedTile == null) return;
+		selectedTile.ClearHighlight();
+		selectedTile = null;
 	}
 }

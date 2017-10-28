@@ -1,35 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Map : MonoBehaviour
 {
 	public int GeneratedSize = 10;
 	public float TileRadius = 1f;
-	public float TileGap = 0f;
+	public float TileGap;
 	public float WallProbability = 0.1f;
 	public float TileBaseHeight = -0.2f;
 	public GameObject FloorTilePrefab;
 	public GameObject WallTilePrefab;
 	public GameObject PlayerPrefab;
 
-	public GameObject player = null;
-	
+	public GameController GameController;
+	public Character Player;
+
 	private readonly Dictionary<int, TileInfo> tiles = new Dictionary<int, TileInfo>();
 	private readonly float hexInnerRadiusMultiplier = (float) Math.Sqrt(3) / 2f;
 	private const int MaxMapSize = 9999;
 
+
 	void Start()
 	{
+		GameController = FindObjectOfType<GameController>();
+
 		GenerateNewMap();
-		
-		// gen player
-		player = Instantiate(PlayerPrefab);
-		var character = player.GetComponentInChildren<Character>();
-			
-		character.OccupiedTile = this[3, 4];
-		character.gameObject.AddComponent<ControllerInput>().character = character;
-		character.gameObject.GetComponent<ControllerInput>().map = this;
+
+		Player = GameController.CreateCharacter(PlayerPrefab, 4, 4);
+		var controllerInput = Player.gameObject.AddComponent<ControllerInput>();
+		controllerInput.Character = Player;
+		controllerInput.Map = this;
 	}
 
 	public TileInfo this[int x, int y]
@@ -40,7 +42,11 @@ public class Map : MonoBehaviour
 			tiles.TryGetValue(x + y * MaxMapSize, out tile);
 			return tile;
 		}
-		set { tiles[x + y * MaxMapSize] = value; }
+		set
+		{
+			tiles[x + y * MaxMapSize] = value;
+			CreateTileLinks();
+		}
 	}
 
 	public void GenerateNewMap()
@@ -49,7 +55,7 @@ public class Map : MonoBehaviour
 		{
 			for (var x = 0; x < GeneratedSize; x++)
 			{
-				var prefab = UnityEngine.Random.value < WallProbability
+				var prefab = Random.value < WallProbability
 					? WallTilePrefab
 					: FloorTilePrefab;
 				CreateTileFromPrefab(prefab, x, y);
@@ -58,10 +64,11 @@ public class Map : MonoBehaviour
 		CreateTileLinks();
 	}
 
-	public void CreateTileLinks()
+	private void CreateTileLinks()
 	{
 		foreach (var tileInfo in tiles.Values)
 		{
+			tileInfo.ClearTileConnections();
 			var x = tileInfo.X;
 			var y = tileInfo.Y;
 			var o = tileInfo.Y % 2 * 2 - 1;
@@ -72,6 +79,11 @@ public class Map : MonoBehaviour
 			Link(tileInfo, this[x + o, y + 1]);
 			Link(tileInfo, this[x + o, y - 1]);
 		}
+	}
+
+	private static void Link(TileInfo source, TileInfo target)
+	{
+		if (source != null && target != null) source.ConnectToTile(target);
 	}
 
 	public TileInfo GetTileInDirection(TileInfo startTile, int direction)
@@ -99,11 +111,6 @@ public class Map : MonoBehaviour
 		this[x, y] = tileInfo;
 		tileInfo.X = x;
 		tileInfo.Y = y;
-	}
-
-	private static void Link(TileInfo source, TileInfo target)
-	{
-		if (source != null && target != null) source.Neighbours.Add(target);
 	}
 
 	private Vector3 GetTilePosition(int x, int y)

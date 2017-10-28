@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -15,15 +14,15 @@ public class GameController : MonoBehaviour
 
 	private class DamageEvent
 	{
-		public readonly TileInfo source;
-		public readonly TileInfo target;
-		public readonly int damage;
+		public readonly TileInfo Source;
+		public readonly TileInfo Target;
+		public readonly int Damage;
 
 		public DamageEvent(TileInfo source, TileInfo target, int damage)
 		{
-			this.source = source;
-			this.target = target;
-			this.damage = damage;
+			Source = source;
+			Target = target;
+			Damage = damage;
 		}
 	}
 
@@ -68,6 +67,31 @@ public class GameController : MonoBehaviour
 		}
 	}
 
+	public Character CreateCharacter(GameObject prefab, int xPos, int yPos)
+	{
+		var instance = Instantiate(prefab);
+		var character = instance.GetComponentInChildren<Character>();
+		if (character == null)
+		{
+			Destroy(instance);
+			throw new ArgumentException("given prefab has no character script component");
+		}
+
+		var targetTile = Map[xPos, yPos];
+		if (targetTile == null || !targetTile.IsWalkable || targetTile.CharacterStandingThere != null)
+		{
+			Destroy(instance);
+			throw new ArgumentException("given coordinates do not point to a valid tile");
+		}
+
+		targetTile.CharacterStandingThere = character;
+		character.OccupiedTile = targetTile;
+		character.OutermostGameObject = instance;
+		instance.transform.SetParent(Map.transform);
+		instance.transform.position = targetTile.GlobalMidpointPosition;
+		return character;
+	}
+
 	/// <returns>A list of characters that were hit during the turn.</returns>
 	private IEnumerable<Character> CalculateNextGameState()
 	{
@@ -106,7 +130,7 @@ public class GameController : MonoBehaviour
 			var damageTaken = 0;
 			foreach (var damageEvent in damageEvents)
 			{
-				if (damageEvent.target != currTile && damageEvent.target != moveTarget) continue;
+				if (damageEvent.Target != currTile && damageEvent.Target != moveTarget) continue;
 				// evade: rolling characters are invulvnerable
 				if (atom.Type == ActionType.Roll) continue;
 				// block: blocking characters ignore damage from the 3 tiles in front of them
@@ -118,10 +142,10 @@ public class GameController : MonoBehaviour
 						Map.GetTileInDirection(currTile, character.Direction),
 						Map.GetTileInDirection(currTile, character.Direction + 1),
 					};
-					if (blockingSources.Contains(damageEvent.source)) continue;
+					if (blockingSources.Contains(damageEvent.Source)) continue;
 				}
 				// character did not block or evade so we deal damage
-				damageTaken += damageEvent.damage;
+				damageTaken += damageEvent.Damage;
 			}
 			if (damageTaken > 0)
 			{

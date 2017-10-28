@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Character : MonoBehaviour
@@ -16,6 +15,7 @@ public class Character : MonoBehaviour
 
 	public float ModelScale = 1;
 	public GameObject ModelPrefab;
+	public GameObject OutermostGameObject;
 
 
 	public string CurrentActionName { get { return CurrentAction.Name; } }
