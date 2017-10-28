@@ -140,7 +140,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GeneratedSize: 10
-  TileDistance: 1.8
+  TileRadius: 1
+  TileGap: 0
   WallProbability: 0.1
   TileBaseHeight: -0.2
   FloorTilePrefab: {fileID: 1398303663365326, guid: c65827955a864654f8e3ac3bf909ab85,

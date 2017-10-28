@@ -5,13 +5,15 @@ using UnityEngine;
 public class Map : MonoBehaviour
 {
 	public int GeneratedSize = 10;
-	public float TileDistance = 1f;
+	public float TileRadius = 1f;
+	public float TileGap = 0f;
 	public float WallProbability = 0.1f;
 	public float TileBaseHeight = -0.2f;
 	public GameObject FloorTilePrefab;
 	public GameObject WallTilePrefab;
 
 	private readonly Dictionary<int, TileInfo> tiles = new Dictionary<int, TileInfo>();
+	private readonly float HexInnerRadiusMultiplier = (float) Math.Sqrt(3) / 2f;
 	private const int MaxMapSize = 9999;
 
 	void Start()
@@ -73,10 +75,11 @@ public class Map : MonoBehaviour
 
 	private Vector3 GetTilePosition(int x, int y)
 	{
+		var tileWidth = HexInnerRadiusMultiplier * TileRadius * 2 + TileGap;
 		return new Vector3(
-			x * TileDistance + y % 2 * TileDistance / 2f,
+			x * tileWidth + y % 2 * tileWidth / 2f,
 			TileBaseHeight,
-			(float) Math.Sqrt(3) / 2f * TileDistance * y
+			HexInnerRadiusMultiplier * tileWidth * y
 		);
 	}
 }
