@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class TileInfo : MonoBehaviour
 {
-	public bool isWalkable = true;
+	public bool IsWalkable = true;
+	public int X;
+	public int Y;
+
+	// TODO: reference main scripts instead of game objects here
+	public GameObject CharacterStandingThere;
+	public GameObject PickupLyingThere;
 
 	public List<TileInfo> Neighbours
 	{
