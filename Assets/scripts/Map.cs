@@ -72,7 +72,7 @@ public class Map : MonoBehaviour
 			case 3: return this[x - 1, y];
 			case 4: return this[x - 1 + y % 2, y - 1];
 			case 5: return this[x + y % 2, y - 1];
-			default: throw new ArgumentOutOfRangeException();
+			default: throw new ArgumentOutOfRangeException("direction", direction, null);
 		}
 	}
 

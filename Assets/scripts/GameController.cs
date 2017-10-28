@@ -34,7 +34,7 @@ public class GameController : MonoBehaviour
 	private State state = State.Input;
 
 
-	private bool EveryCharacterIsIdle { get { return registeredCharacters.All(c => !c.inAnimation); } }
+	private bool EveryCharacterIsIdle { get { return registeredCharacters.All(c => !c.InAnimation); } }
 
 
 	private void Update()
@@ -48,7 +48,11 @@ public class GameController : MonoBehaviour
 				if (EveryCharacterIsIdle)
 				{
 					var charactersHit = CalculateNextGameState();
-					foreach (var character in charactersHit) character.StartHitAnimation();
+					foreach (var character in charactersHit)
+					{
+						character.GoToNextActionAtom();
+						character.StartHitAnimation();
+					}
 					state = State.HitAnimations;
 				}
 				break;
