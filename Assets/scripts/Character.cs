@@ -48,12 +48,21 @@ public class Character : MonoBehaviour
     // Update is called once per frame
     void Update() { }
 
-	public ActionAtom ExecuteTurn()
+	public void StartTurnAnimation()
+	{
+		// TODO STEVE: start animation corresponding to the currernt action atom
+	}
+
+	public void StartHitAnimation()
+	{
+		// TODO STEVE: start hit animation
+	}
+	
+	public void GoToNextActionAtom()
 	{
 		var currAtom = CurrentAction.CurrentTurnActionAtom;
-		CurrentAction.ExecuteTurn();
+		CurrentAction.Tick();
 		if (CurrentAction.IsDone) CurrentAction = new Action(ActionDefinition.Idle);
-		return currAtom;
 	}
 
 	public void DealDamage(int amount) { Health -= amount; }

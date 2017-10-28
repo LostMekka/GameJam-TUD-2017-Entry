@@ -20,7 +20,7 @@ public class Action
 
 	public Action(ActionDefinition definition) { Definition = definition; }
 
-	public void ExecuteTurn()
+	public void Tick()
 	{
 		currentTurnIndex++;
 		if (IsDone && CanLoop) currentTurnIndex = 0;

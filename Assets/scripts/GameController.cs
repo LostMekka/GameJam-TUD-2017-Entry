@@ -4,9 +4,30 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+	private enum State
+	{
+		Input,
+		TurnAnimations,
+		HitAnimations,
+	}
+
+
 	public Map Map;
 
 	private readonly List<Character> registeredCharacters = new List<Character>();
+	private State state = State.Input;
+
+
+	private void Update()
+	{
+		switch (state)
+		{
+			case State.TurnAnimations:
+				break;
+			case State.HitAnimations:
+				break;
+		}
+	}
 
 	public void RegisterCharacter(Character character)
 	{
@@ -17,7 +38,7 @@ public class GameController : MonoBehaviour
 	{
 		foreach (var character in registeredCharacters)
 		{
-			var actionAtom = character.ExecuteTurn();
+			character.StartTurnAnimation();
 			// TODO: collect all actions, execute them, update state, trigger animation phase
 		}
 	}
