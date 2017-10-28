@@ -13,13 +13,10 @@ public class Map : MonoBehaviour
 	public GameObject WallTilePrefab;
 
 	private readonly Dictionary<int, TileInfo> tiles = new Dictionary<int, TileInfo>();
-	private readonly float HexInnerRadiusMultiplier = (float) Math.Sqrt(3) / 2f;
+	private readonly float hexInnerRadiusMultiplier = (float) Math.Sqrt(3) / 2f;
 	private const int MaxMapSize = 9999;
 
-	void Start()
-	{
-		GenerateNewMap();
-	}
+	void Start() { GenerateNewMap(); }
 
 	public TileInfo this[int x, int y]
 	{
@@ -41,12 +38,7 @@ public class Map : MonoBehaviour
 				var prefab = UnityEngine.Random.value < WallProbability
 					? WallTilePrefab
 					: FloorTilePrefab;
-				var tile = Instantiate(prefab);
-				tile.transform.position = GetTilePosition(x, y);
-				var tileInfo = tile.GetComponent<TileInfo>();
-				this[x, y] = tileInfo;
-				tileInfo.X = x;
-				tileInfo.Y = y;
+				CreateTileFromPrefab(prefab, x, y);
 			}
 		}
 		CreateTileLinks();
@@ -68,6 +60,17 @@ public class Map : MonoBehaviour
 		}
 	}
 
+	private void CreateTileFromPrefab(GameObject prefab, int x, int y)
+	{
+		var tile = Instantiate(prefab);
+		tile.transform.parent = transform;
+		tile.transform.localPosition = GetTilePosition(x, y);
+		var tileInfo = tile.GetComponent<TileInfo>();
+		this[x, y] = tileInfo;
+		tileInfo.X = x;
+		tileInfo.Y = y;
+	}
+
 	private static void Link(TileInfo source, TileInfo target)
 	{
 		if (source != null && target != null) source.Neighbours.Add(target);
@@ -75,11 +78,11 @@ public class Map : MonoBehaviour
 
 	private Vector3 GetTilePosition(int x, int y)
 	{
-		var tileWidth = HexInnerRadiusMultiplier * TileRadius * 2 + TileGap;
+		var tileWidth = hexInnerRadiusMultiplier * TileRadius * 2 + TileGap;
 		return new Vector3(
 			x * tileWidth + y % 2 * tileWidth / 2f,
 			TileBaseHeight,
-			HexInnerRadiusMultiplier * tileWidth * y
+			hexInnerRadiusMultiplier * tileWidth * y
 		);
 	}
 }

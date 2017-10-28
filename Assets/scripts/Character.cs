@@ -35,6 +35,7 @@ public class Character : MonoBehaviour
 		model = Instantiate(ModelPrefab);
 		model.transform.localScale = new Vector3(ModelScale, ModelScale, ModelScale);
 		model.transform.parent = gameObject.transform;
+		model.transform.localPosition = Vector3.zero;
 
 		Health = MaxHealth;
 		Stamina = MaxStamina;
