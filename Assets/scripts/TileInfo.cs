@@ -8,6 +8,10 @@ public class TileInfo : MonoBehaviour
 	public int x;
 	public int y;
 
+	// TODO: reference main scripts instead of game objects here
+	public GameObject CharacterStandingThere;
+	public GameObject PickupLyingThere;
+
 	public List<TileInfo> Neighbours
 	{
 		get { return neighbours; }
