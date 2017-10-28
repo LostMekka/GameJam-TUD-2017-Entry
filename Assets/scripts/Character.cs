@@ -8,20 +8,27 @@ public class Character : MonoBehaviour
 	public int Health = 100;
 	public int Stamina = 100;
 	public TileInfo OccupiedTile;
-	public int Size = 1;
+	public float ModelScale = 1;
+	public GameObject ModelPrefab;
 
 	public readonly Dictionary<string, string> skillList = new Dictionary<string, string>();
 
 	// TODO: change type to animation reference
 	public object AnimationToPlay;
 
+	private GameObject model;
 
 	public string CurrentActionName { get { return CurrentAction.Name; } }
 	public bool IsDead { get { return Health <= 0; } }
 
 
 	// Use this for initialization
-	void Start() { }
+	void Start()
+	{
+		model = Instantiate(ModelPrefab);
+		model.transform.localScale = new Vector3(ModelScale, ModelScale, ModelScale);
+		model.transform.parent = gameObject.transform;
+	}
 
 	// Update is called once per frame
 	void Update() { }
