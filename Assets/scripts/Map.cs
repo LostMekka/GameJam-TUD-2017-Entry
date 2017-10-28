@@ -60,6 +60,22 @@ public class Map : MonoBehaviour
 		}
 	}
 
+	public TileInfo GetTileInDirection(TileInfo startTile, int direction)
+	{
+		var x = startTile.X;
+		var y = startTile.Y;
+		switch ((direction % 6 + 6) % 6)
+		{
+			case 0: return this[x + 1, y];
+			case 1: return this[x + y % 2, y + 1];
+			case 2: return this[x - 1 + y % 2, y + 1];
+			case 3: return this[x - 1, y];
+			case 4: return this[x - 1 + y % 2, y - 1];
+			case 5: return this[x + y % 2, y - 1];
+			default: throw new ArgumentOutOfRangeException();
+		}
+	}
+
 	private void CreateTileFromPrefab(GameObject prefab, int x, int y)
 	{
 		var tile = Instantiate(prefab);

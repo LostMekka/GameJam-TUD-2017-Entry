@@ -9,6 +9,7 @@ public class Character : MonoBehaviour
 	public int MaxHealth = 100;
 	public int Stamina;
 	public int MaxStamina = 100;
+	public int Direction;
 	public TileInfo OccupiedTile;
 	public float ModelScale = 1;
 	public GameObject ModelPrefab;
