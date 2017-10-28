@@ -134,7 +134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4836906792294414}
   m_Layer: 0
-  m_Name: Character_Toon
+  m_Name: Character_Skeleton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -311,7 +311,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1395228606657764}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.9634194, y: -0.6261864, z: 3.475673}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4241288774363626}
