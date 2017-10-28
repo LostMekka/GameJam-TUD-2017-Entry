@@ -29,7 +29,6 @@ public class Character : MonoBehaviour
 
     private Animator animator;
 
-
     // Use this for initialization
     void Start()
 	{
@@ -41,30 +40,40 @@ public class Character : MonoBehaviour
 		Health = MaxHealth;
 		Stamina = MaxStamina;
 
-        //gets Animator component if it is on the same GameObject
-        //if it is somewhere else this needs to be changed:
-        animator = GetComponent<Animator>();
+        animator = GetComponentsInChildren<Animator>()[0];
     }
 
     // Update is called once per frame
-    void Update() { }
+    void Update() {
 
-	public void StartTurnAnimation()
+        if (inAnimation == true)
+        {
+            if (this.animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+            {
+                // Avoid any reload.
+                inAnimation = false;
+            }
+        }
+    }
+
+    public void StartTurnAnimation()
 	{
-		// TODO STEVE: start animation corresponding to the currernt action atom
-	}
+        // TODO STEVE: start animation corresponding to the currernt action atom
+        StartAnimation();
+    }
 
 	public void StartHitAnimation()
 	{
-		// TODO STEVE: start hit animation
-	}
-	
-	public void GoToNextActionAtom()
+        // TODO STEVE: start hit animation
+        StartAnimation();
+    }
+
+    public void GoToNextActionAtom()
 	{
 		var currAtom = CurrentAction.CurrentTurnActionAtom;
 		CurrentAction.Tick();
 		if (CurrentAction.IsDone) CurrentAction = new Action(ActionDefinition.Idle);
-	}
+    }
 
 	public void DealDamage(int amount) { Health -= amount; }
 	public void Heal(int amount) { Health += amount; }
@@ -81,52 +90,58 @@ public class Character : MonoBehaviour
         if (CurrentAction.CurrentTurnActionAtom.Type == ActionType.Idle)
         {
             animator.SetTrigger("unitIdle");
+            inAnimation = true;
         }
         else if (CurrentAction.CurrentTurnActionAtom.Type == ActionType.Move)
         {
-            animator.SetTrigger("unitIdle");
+            animator.SetTrigger("unitWalk");
+            inAnimation = true;
         }
         else if (CurrentAction.CurrentTurnActionAtom.Type == ActionType.Roll)
-            //doubled animations
         {
-            animator.SetTrigger("unitIdle");
-
+            //doubled animations
+            animator.SetTrigger("unitWalk");
+            inAnimation = true;
         }
         else if (CurrentAction.CurrentTurnActionAtom.Type == ActionType.Block)
             //doubled animations
         {
             animator.SetTrigger("unitIdle");
-
         }
         else if (CurrentAction.CurrentTurnActionAtom.Type == ActionType.Buildup)
         {
             //doubled animations
-            animator.SetTrigger("unitIdle");
+            animator.SetTrigger("unitVictory");
+            inAnimation = true;
         }
         else if (CurrentAction.CurrentTurnActionAtom.Type == ActionType.Recover)
         {
             //doubled animations
-            animator.SetTrigger("unitIdle");
+            animator.SetTrigger("unitVictory");
+            inAnimation = true;
         }
         else if (CurrentAction.CurrentTurnActionAtom.Type == ActionType.AttackSingleTile)
         {
-            animator.SetTrigger("unitIdle");
+            animator.SetTrigger("unitAttack01");
+            inAnimation = true;
         }
         else if (CurrentAction.CurrentTurnActionAtom.Type == ActionType.Attack3Tiles)
         {
             //doubled animations
-            animator.SetTrigger("unitIdle");
-
+            animator.SetTrigger("unitAttack01");
+            inAnimation = true;
         }
         else if (CurrentAction.CurrentTurnActionAtom.Type == ActionType.Attack5Tiles)
         {
             //doubled animations
-            animator.SetTrigger("unitIdle");
+            animator.SetTrigger("unitAttack02");
+            inAnimation = true;
         }
         else if (CurrentAction.CurrentTurnActionAtom.Type == ActionType.AttackAllTiles)
         {
             //doubled animations
-            animator.SetTrigger("unitIdle");
+            animator.SetTrigger("unitAttack02");
+            inAnimation = true;
         }
         else if (CurrentAction.CurrentTurnActionAtom.Type == ActionType.Rotate)
         {
