@@ -5,6 +5,8 @@ using UnityEngine;
 public class TileInfo : MonoBehaviour
 {
 	public bool isWalkable = true;
+	public int x;
+	public int y;
 
 	public List<TileInfo> Neighbours
 	{
