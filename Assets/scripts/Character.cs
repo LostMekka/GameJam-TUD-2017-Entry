@@ -21,16 +21,12 @@ public class Character : MonoBehaviour
 
 
 	// Use this for initialization
-	void Start()
-	{
-		// Add some elements to the dictionary.
-		// TODO STEVE: initialize skill to animation mapping
-		skillList.Add("txt", "notepad.exe");
-		skillList.Add("bmp", "paint.exe");
-		skillList.Add("dib", "paint.exe");
-		skillList.Add("rtf", "wordpad.exe");
-	}
+	void Start () {
 
+
+
+    }
+	
 	// Update is called once per frame
 	void Update() { }
 

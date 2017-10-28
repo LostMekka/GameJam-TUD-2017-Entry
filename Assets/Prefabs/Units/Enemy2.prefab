@@ -65,13 +65,14 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4884032994279798}
+  - component: {fileID: 114254258052783352}
   m_Layer: 0
   m_Name: Enemy2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1125009512321698
 GameObject:
   m_ObjectHideFlags: 1
@@ -812,6 +813,22 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114254258052783352
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1097753962766952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d61162bad70424419a323aef86fe667, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitHealth: 100
+  unitStamina: 100
+  CurrentTile: {fileID: 0}
+  unitSize: 1
+  unitAction: idle
 --- !u!137 &137506672830160912
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

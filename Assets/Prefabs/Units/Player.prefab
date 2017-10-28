@@ -353,13 +353,14 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4275152902745496}
+  - component: {fileID: 114666025972598746}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1906821756347294
 GameObject:
   m_ObjectHideFlags: 1
@@ -642,7 +643,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1291144438942056}
-  m_LocalRotation: {x: -0.41948435, y: 0.5628601, z: 0.6547678, w: 0.28017977}
+  m_LocalRotation: {x: -0.41948426, y: 0.56286, z: 0.65476775, w: 0.28017974}
   m_LocalPosition: {x: -13.486502, y: -5.004246, z: 28.74915}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -899,6 +900,22 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114666025972598746
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1902661448251756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d61162bad70424419a323aef86fe667, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitHealth: 100
+  unitStamina: 100
+  CurrentTile: {fileID: 0}
+  unitSize: 1
+  unitAction: idle
 --- !u!137 &137050277652464708
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
