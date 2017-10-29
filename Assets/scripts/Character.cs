@@ -34,6 +34,7 @@ public class Character : MonoBehaviour
 	private GameObject model;
 	private Animator animator;
 
+    public GameObject ParticleEffect;
 
 	public int Direction
 	{
@@ -134,7 +135,11 @@ public class Character : MonoBehaviour
 	private IEnumerator HitAnimationCoroutine(float seconds)
 	{
 		IsWaitingForAnimation = true;
-		// TODO STEVE: trigger hit animation here
+        animator.SetTrigger("unitHit");
+
+
+        GameObject newHitEffect = Instantiate(ParticleEffect);
+        Destroy(newHitEffect,2.5f);
 
 		float elapsedTime = 0;
 		while (elapsedTime < seconds)
