@@ -157,11 +157,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d508d8b42b05f4c439b0d55b973ee69d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsWalkable: 1
+  IsWalkable: 0
   X: 0
   Y: 0
   CharacterStandingThere: {fileID: 0}
-  PickupLyingThere: {fileID: 0}
 --- !u!114 &114549072886153304
 MonoBehaviour:
   m_ObjectHideFlags: 1
