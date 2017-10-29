@@ -45,7 +45,6 @@ public class GameController : MonoBehaviour
 			case State.Input:
 				if (registeredCharacters.Count > 0 && EveryCharacterFinishedInput)
 				{
-					Debug.Log("start turn anim");
 					foreach (var character in registeredCharacters)
 					{
 						character.UpdateDirectionBasedOnActionSequence();
@@ -57,9 +56,7 @@ public class GameController : MonoBehaviour
 			case State.TurnAnimations:
 				if (EveryCharacterIsIdle)
 				{
-					Debug.Log("start turn calc");
 					var charactersHit = CalculateNextGameState();
-					Debug.Log("start hit");
 					foreach (var character in charactersHit) character.StartHitAnimation();
 					foreach (var character in registeredCharacters) character.GoToNextActionAtom();
 					state = State.HitAnimations;
@@ -68,7 +65,6 @@ public class GameController : MonoBehaviour
 			case State.HitAnimations:
 				if (EveryCharacterIsIdle)
 				{
-					Debug.Log("start input");
 					foreach (var character in registeredCharacters) character.RequestInput();
 					state = State.Input;
 				}
@@ -115,7 +111,9 @@ public class GameController : MonoBehaviour
 				character.OnInputRequiredCallback = controllerInput.OnRequestInput;
 				break;
 			case Character.InputType.Computer:
-				// TODO STEFAN: add AI input component to character
+				var aiInput = character.gameObject.AddComponent<AiInput>();
+				aiInput.Character = character;
+				character.OnInputRequiredCallback = aiInput.OnRequestInput;
 				break;
 			default:
 				throw new ArgumentOutOfRangeException("inputType", inputType, null);

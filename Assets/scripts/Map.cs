@@ -41,7 +41,7 @@ public class Map : MonoBehaviour
 			var posX = (int) (GeneratedSize * Random.value);
 			var posY = (int) (GeneratedSize * Random.value);
 			
-			if (this[posX, posY].CanWalkTo == true)
+			if (this[posX, posY].CanWalkTo)
 			{
 				var Enemy = GameController.CreateCharacter(EnemyPrefab, posX, posY,Character.InputType.Computer);
 				--count;

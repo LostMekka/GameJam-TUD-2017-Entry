@@ -21,9 +21,9 @@ public class Character : MonoBehaviour
 	public float MoveTime = 1f;
 
 	public TileInfo OccupiedTile;
-	public ActionSequence CurrentActionSequence { get; private set; } 
-	public bool IsWaitingForAnimation { get; private set; }
-	public bool IsWaitingForInput { get; private set; }
+	public ActionSequence CurrentActionSequence;
+	public bool IsWaitingForAnimation;
+	public bool IsWaitingForInput;
 	public OnInputRequired OnInputRequiredCallback;
 
 	public float ModelScale = 1;
@@ -186,8 +186,8 @@ public class Character : MonoBehaviour
 	{
 		if (OnInputRequiredCallback != null)
 		{
-			OnInputRequiredCallback();
 			IsWaitingForInput = true;
+			OnInputRequiredCallback();
 		}
 		else
 		{

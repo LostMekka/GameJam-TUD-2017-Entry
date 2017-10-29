@@ -21,38 +21,38 @@ public class HudUpdate : MonoBehaviour
 				if (slider.gameObject.name == "Health") slider.value = healthValue;
 				if (slider.gameObject.name == "Stamina") slider.value = staminaValue;
 			}
-			if (character.CurrentActionSequence == null)
-			{
-				if (LastSequence != null)
-				{
-					var stuff = GameObject.FindGameObjectsWithTag("action_tag");
-					foreach (var s in stuff)
-					{
-						Debug.Log("destroy");
-						Destroy(s);
-					}
-				}
-			}
-
-			if (character.CurrentActionSequence == LastSequence) return;
-			if (character.CurrentActionSequence != null)
-			{
-				foreach (var Action in character.CurrentActionSequence.Definition.Atoms )
-				{
-					if (Action.Type == ActionType.Attack3Tiles ||
-					    Action.Type == ActionType.AttackSingleTile ||
-					    Action.Type == ActionType.AttackAllTiles ||
-					    Action.Type == ActionType.Attack5Tiles)
-					{
-						createIcon(character);
-					}
-					else if( Action.Type == ActionType.Move ) createIcon(character);
-					else if( Action.Type == ActionType.Rotate ) createIcon(character);
-					else if( Action.Type == ActionType.Recover ) createIcon(character);
-					else if( Action.Type == ActionType.Block ) createIcon(character);
-				}		
-			}
-			LastSequence = character.CurrentActionSequence;
+//			if (character.CurrentActionSequence == null)
+//			{
+//				if (LastSequence != null)
+//				{
+//					var stuff = GameObject.FindGameObjectsWithTag("action_tag");
+//					foreach (var s in stuff)
+//					{
+//						Debug.Log("destroy");
+//						Destroy(s);
+//					}
+//				}
+//			}
+//
+//			if (character.CurrentActionSequence == LastSequence) return;
+//			if (character.CurrentActionSequence != null)
+//			{
+//				foreach (var Action in character.CurrentActionSequence.Definition.Atoms )
+//				{
+//					if (Action.Type == ActionType.Attack3Tiles ||
+//					    Action.Type == ActionType.AttackSingleTile ||
+//					    Action.Type == ActionType.AttackAllTiles ||
+//					    Action.Type == ActionType.Attack5Tiles)
+//					{
+//						createIcon(character);
+//					}
+//					else if( Action.Type == ActionType.Move ) createIcon(character);
+//					else if( Action.Type == ActionType.Rotate ) createIcon(character);
+//					else if( Action.Type == ActionType.Recover ) createIcon(character);
+//					else if( Action.Type == ActionType.Block ) createIcon(character);
+//				}		
+//			}
+//			LastSequence = character.CurrentActionSequence;
 		}
 
 	}
