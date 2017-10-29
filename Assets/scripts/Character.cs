@@ -34,7 +34,7 @@ public class Character : MonoBehaviour
 	private GameObject model;
 	private Animator animator;
 
-    public GameObject ParticleEffect;
+	public GameObject ParticleEffect;
 
 	public int Direction
 	{
@@ -57,6 +57,15 @@ public class Character : MonoBehaviour
 			return atom.Type == ActionType.Move || atom.Type == ActionType.Evade
 				? OccupiedTile.GetTileInDirection(Direction + atom.DirectionOffset)
 				: null;
+		}
+	}
+
+	public bool CanAcceptNewInputSequence
+	{
+		get
+		{
+			// TODO: check that
+			return true;
 		}
 	}
 
@@ -136,11 +145,11 @@ public class Character : MonoBehaviour
 	private IEnumerator HitAnimationCoroutine(float seconds)
 	{
 		IsWaitingForAnimation = true;
-        animator.SetTrigger("unitHit");
+		animator.SetTrigger("unitHit");
 
 
-        GameObject newHitEffect = Instantiate(ParticleEffect);
-        Destroy(newHitEffect,2.5f);
+		GameObject newHitEffect = Instantiate(ParticleEffect);
+		Destroy(newHitEffect, 2.5f);
 
 		float elapsedTime = 0;
 		while (elapsedTime < seconds)
@@ -187,8 +196,10 @@ public class Character : MonoBehaviour
 
 	public void OnFinishedInput(ActionSequence requestedActionSequence = null)
 	{
-		// TODO: do not change sequence if it is not abortable
-		if (requestedActionSequence != null) CurrentActionSequence = requestedActionSequence;
+		if (requestedActionSequence != null && CanAcceptNewInputSequence)
+		{
+			CurrentActionSequence = requestedActionSequence;
+		}
 		IsWaitingForInput = false;
 	}
 }

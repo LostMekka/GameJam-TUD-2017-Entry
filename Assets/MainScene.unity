@@ -140,6 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GeneratedSize: 10
+  EnemiesToPlace: 10
   TileRadius: 1
   TileGap: 0
   WallProbability: 0.1
@@ -148,10 +149,11 @@ MonoBehaviour:
     type: 2}
   WallTilePrefab: {fileID: 1025289075216762, guid: 22c1864d9b7c08a418877ebbda32a8f3,
     type: 2}
-  PlayerPrefab: {fileID: 1395228606657764, guid: c56e5e55bef694e49ae729e45ef2dd9b,
+  PlayerPrefab: {fileID: 1395228606657764, guid: 2477e2e2d1500a047977279db6ee55b8,
     type: 2}
-  GameController: {fileID: 0}
-  Player: {fileID: 0}
+  EnemyPrefab: {fileID: 1395228606657764, guid: c56e5e55bef694e49ae729e45ef2dd9b,
+    type: 2}
+  GameController: {fileID: 1030541480}
 --- !u!4 &128915322
 Transform:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ public class AiInput : MonoBehaviour, IInputScript
 	public void OnRequestInput()
 	{
 		// TODO: behaviour
-		Character.OnFinishedInput();
+		Character.OnFinishedInput(new ActionSequence(ActionDefinition.Walk, (int)(Random.value * 6)));
 	}
 
 }
