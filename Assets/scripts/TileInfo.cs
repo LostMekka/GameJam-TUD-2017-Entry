@@ -4,7 +4,6 @@ using UnityEngine;
 public class TileInfo : MonoBehaviour
 {
 	public bool IsWalkable = true;
-	public Map Map;
 	public int X;
 	public int Y;
 	public Character CharacterStandingThere;
@@ -36,8 +35,6 @@ public class TileInfo : MonoBehaviour
 		meshRenderer = GetComponentInChildren<MeshRenderer>();
 		defaultColor = meshRenderer.material.color;
 	}
-
-	public TileInfo GetTileInDirection(int direction) { return Map.GetTileInDirection(this, direction); }
 
 	public void Highlight(Color color) { meshRenderer.material.color = color; }
 

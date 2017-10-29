@@ -143,7 +143,7 @@ public class Character : MonoBehaviour
 			);
 
 			//Call MovePosition on attached Rigidbody2D and move it to the calculated position.
-			transform.Translate(endTile.GlobalMidpointPosition);
+			transform.Translate(newPostion);
 
 			//Recalculate the remaining distance after moving.
 			sqrRemainingDistance = (transform.position - endTile.GlobalMidpointPosition).sqrMagnitude;
