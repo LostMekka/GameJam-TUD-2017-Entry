@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class Character : MonoBehaviour
@@ -7,8 +8,7 @@ public class Character : MonoBehaviour
 	public int MaxHealth = 100;
 	public int Stamina;
 	public int MaxStamina = 100;
-	public float MoveTime = 0.1f;
-	private float inverseMoveTime;
+	public float MoveTime = 1f;
 
 	public ActionSequence CurrentActionSequence;
 	public TileInfo OccupiedTile;
@@ -17,7 +17,11 @@ public class Character : MonoBehaviour
 	public float ModelScale = 1;
 	public GameObject ModelPrefab;
 	public GameObject OutermostGameObject;
+
 	private int direction;
+	private GameObject model;
+	private Animator animator;
+
 
 	public int Direction
 	{
@@ -44,10 +48,6 @@ public class Character : MonoBehaviour
 	}
 
 
-	private GameObject model;
-	private Animator animator;
-
-
 	// Use this for initialization
 	void Start()
 	{
@@ -60,48 +60,10 @@ public class Character : MonoBehaviour
 		Stamina = MaxStamina;
 
 		animator = GetComponentInChildren<Animator>();
-		Debug.Log(animator);
-
-
-		//By storing the reciprocal of the move time we can use it by multiplying instead of dividing, this is more efficient.
-		inverseMoveTime = 1f / MoveTime;
 	}
-
-	void Update() { InAnimation = InAnimation && !animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"); }
 
 	//start movement and animation
-	public void StartTurnAnimation()
-	{
-		MoveToPosition();
-		InAnimation = true;
-	}
-
-	//just plays animation
-	public void StartHitAnimation()
-	{
-		// TODO: trigger hit animation instead-> !after! switch to idle
-		// TODO STEVE: trigger hit animation
-		InAnimation = true;
-	}
-
-	public void GoToNextActionAtom()
-	{
-		CurrentActionSequence.Tick();
-		if (CurrentActionSequence.IsDone) CurrentActionSequence = new ActionSequence(ActionDefinition.Idle);
-	}
-
-	public void DealDamage(int amount) { Health -= amount; }
-	public void Heal(int amount) { Health += amount; }
-
-	public bool MoveToTile(TileInfo tile)
-	{
-		if (tile.CharacterStandingThere != null || !tile.IsWalkable) return false;
-		OccupiedTile.CharacterStandingThere = null;
-		tile.CharacterStandingThere = this;
-		OccupiedTile = tile;
-		OutermostGameObject.transform.position = tile.GlobalMidpointPosition;
-		return true;
-	}
+	public void StartTurnAnimation() { StartCoroutine(TurnAnimationCoroutine(MoveTime)); }
 
 	private string GetAnimationNameForActionType(ActionType type)
 	{
@@ -123,37 +85,63 @@ public class Character : MonoBehaviour
 		}
 	}
 
-	private void MoveToPosition()
+	private IEnumerator TurnAnimationCoroutine(float seconds)
 	{
-		var endTile = MoveTarget ?? OccupiedTile;
-		//Calculate the remaining distance to move based on the square magnitude of the difference between current position and end parameter. 
-		//Square magnitude is used instead of magnitude because it's computationally cheaper.
-		float sqrRemainingDistance = (endTile.transform.position - endTile.GlobalMidpointPosition).sqrMagnitude;
-
-		//--start continuous animation
+		InAnimation = true;
 		animator.SetTrigger(GetAnimationNameForActionType(CurrentActionSequence.CurrentTurnActionAtom.Type));
 
-		//While that distance is greater than a very small amount (Epsilon, almost zero):
-		while (sqrRemainingDistance > float.Epsilon)
+		float elapsedTime = 0;
+		var source = OccupiedTile.GlobalMidpointPosition;
+		var target = (MoveTarget ?? OccupiedTile).GlobalMidpointPosition;
+		while (elapsedTime < seconds)
 		{
-			//Find a new position proportionally closer to the end, based on the moveTime
-			Vector3 newPostion = Vector3.MoveTowards(
-				transform.position, endTile.GlobalMidpointPosition,
-				inverseMoveTime * Time.deltaTime
-			);
-
-			//Call MovePosition on attached Rigidbody2D and move it to the calculated position.
-			transform.Translate(newPostion);
-
-			//Recalculate the remaining distance after moving.
-			sqrRemainingDistance = (transform.position - endTile.GlobalMidpointPosition).sqrMagnitude;
-
-			Debug.Log("Moving");
+			transform.position = Vector3.Lerp(source, target, elapsedTime / seconds);
+			elapsedTime += Time.deltaTime;
+			yield return new WaitForEndOfFrame();
 		}
 
-		//--end Animation
+		transform.position = target;
 		animator.SetTrigger("unitIdle");
+		InAnimation = false;
+	}
 
-		Debug.Log("EndOfMovement");
+	public void StartHitAnimation()
+	{
+		StartCoroutine(HitAnimationCoroutine(MoveTime));
+	}
+
+	private IEnumerator HitAnimationCoroutine(float seconds)
+	{
+		InAnimation = true;
+		// TODO STEVE: trigger hit animation here
+
+		float elapsedTime = 0;
+		while (elapsedTime < seconds)
+		{
+			elapsedTime += Time.deltaTime;
+			yield return new WaitForEndOfFrame();
+		}
+
+		animator.SetTrigger("unitIdle");
+		InAnimation = false;
+	}
+
+	public void GoToNextActionAtom()
+	{
+		CurrentActionSequence.Tick();
+		if (CurrentActionSequence.IsDone) CurrentActionSequence = new ActionSequence(ActionDefinition.Idle);
+	}
+
+	public void DealDamage(int amount) { Health -= amount; }
+	public void Heal(int amount) { Health += amount; }
+
+	public bool MoveToTile(TileInfo tile)
+	{
+		if (tile.CharacterStandingThere != null || !tile.IsWalkable) return false;
+		OccupiedTile.CharacterStandingThere = null;
+		tile.CharacterStandingThere = this;
+		OccupiedTile = tile;
+		OutermostGameObject.transform.position = tile.GlobalMidpointPosition;
+		return true;
 	}
 }
