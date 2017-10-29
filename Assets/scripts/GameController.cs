@@ -91,6 +91,10 @@ public class GameController : MonoBehaviour
 		instance.transform.SetParent(Map.transform);
 		instance.transform.position = targetTile.GlobalMidpointPosition;
 		registeredCharacters.Add(character);
+
+		var bar = character.gameObject.AddComponent<ActionBar>();
+		bar.character = character;
+		
 		return character;
 	}
 
