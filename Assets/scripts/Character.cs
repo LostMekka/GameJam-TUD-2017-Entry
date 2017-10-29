@@ -149,7 +149,7 @@ public class Character : MonoBehaviour
 		animator.SetTrigger("unitHit");
 
 
-		GameObject newHitEffect = Instantiate(ParticleEffect);
+		GameObject newHitEffect = Instantiate(ParticleEffect, this.transform);
 		Destroy(newHitEffect, 2.5f);
 
 		float elapsedTime = 0;
