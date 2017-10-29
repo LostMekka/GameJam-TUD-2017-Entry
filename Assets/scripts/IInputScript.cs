@@ -1,9 +1,5 @@
-﻿namespace DefaultNamespace
+﻿public interface IInputScript
 {
-	public interface IInputScript
-	{
-		Character Character { get; set; }
-		void BeginInputPhase();
-		void EndInputPhase(ActionSequence desiredActionSequence);
-	}
+	Character Character { get; set; }
+	void OnRequestInput();
 }
