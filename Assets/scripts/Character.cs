@@ -72,10 +72,10 @@ public class Character : MonoBehaviour
 	void Update() { InAnimation = InAnimation && !animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"); }
 
 	//start movement and animation
-	public void StartTurnAnimation(TileInfo EndTile)
+	public void StartTurnAnimation()
 	{
 		// TODO STEVE: fix animations
-		MoveToPosition(EndTile);
+		MoveToPosition();
 		InAnimation = true;
 	}
 
