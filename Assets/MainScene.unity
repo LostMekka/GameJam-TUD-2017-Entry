@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GeneratedSize: 10
-  EnemiesToPlace: 1
+  EnemiesToPlace: 10
   TileRadius: 1
   TileGap: 0
   WallProbability: 0.1

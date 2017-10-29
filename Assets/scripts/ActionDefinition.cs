@@ -33,7 +33,7 @@ public class ActionDefinition
 		new List<ActionAtom>
 		{
 			new ActionAtom(ActionType.Buildup),
-			new ActionAtom(ActionType.AttackSingleTile),
+			new ActionAtom(ActionType.Attack3Tiles),
 			new ActionAtom(ActionType.Recover),
 		}
 	);
