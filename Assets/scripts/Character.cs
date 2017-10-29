@@ -113,6 +113,7 @@ public class Character : MonoBehaviour
 		float elapsedTime = 0;
 		var source = OccupiedTile;
 		var target = MovementTarget ?? OccupiedTile;
+		if (!target.CanWalkTo) target = OccupiedTile;
 
 		while (elapsedTime < seconds)
 		{
