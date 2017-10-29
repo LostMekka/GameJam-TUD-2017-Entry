@@ -130,7 +130,7 @@ public class GameController : MonoBehaviour
 		foreach (var character in registeredCharacters)
 		{
 			// TODO: get this from character
-			var damageAmount = 1;
+			var damageAmount = 30;
 			switch (character.CurrentActionSequence.CurrentTurnActionAtom.Type)
 			{
 				case ActionType.AttackSingleTile:
