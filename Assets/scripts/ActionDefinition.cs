@@ -23,7 +23,7 @@ public class ActionDefinition
 		"Roll",
 		new List<ActionAtom>
 		{
-			new ActionAtom(ActionType.Roll),
+			new ActionAtom(ActionType.Evade),
 			new ActionAtom(ActionType.Recover),
 		}
 	);

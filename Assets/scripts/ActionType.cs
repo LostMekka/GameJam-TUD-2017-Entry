@@ -2,7 +2,7 @@
 {
 	Idle,
 	Move,
-	Roll,
+	Evade,
 	Block,
 	Buildup,
 	Recover,

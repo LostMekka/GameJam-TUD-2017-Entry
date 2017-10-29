@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class Character : MonoBehaviour
@@ -7,8 +8,7 @@ public class Character : MonoBehaviour
 	public int MaxHealth = 100;
 	public int Stamina;
 	public int MaxStamina = 100;
-	public float MoveTime = 0.1f;
-	private float inverseMoveTime;
+	public float MoveTime = 1f;
 
 	public ActionSequence CurrentActionSequence;
 	public TileInfo OccupiedTile;
@@ -17,7 +17,11 @@ public class Character : MonoBehaviour
 	public float ModelScale = 1;
 	public GameObject ModelPrefab;
 	public GameObject OutermostGameObject;
+
 	private int direction;
+	private GameObject model;
+	private Animator animator;
+
 
 	public int Direction
 	{
@@ -37,15 +41,11 @@ public class Character : MonoBehaviour
 		get
 		{
 			var atom = CurrentActionSequence.CurrentTurnActionAtom;
-			return atom.Type == ActionType.Move || atom.Type == ActionType.Roll
+			return atom.Type == ActionType.Move || atom.Type == ActionType.Evade
 				? OccupiedTile.GetTileInDirection(Direction + atom.DirectionOffset)
 				: null;
 		}
 	}
-
-
-	private GameObject model;
-	private Animator animator;
 
 
 	// Use this for initialization
@@ -60,28 +60,70 @@ public class Character : MonoBehaviour
 		Stamina = MaxStamina;
 
 		animator = GetComponentInChildren<Animator>();
-		Debug.Log(animator);
-
-
-		//By storing the reciprocal of the move time we can use it by multiplying instead of dividing, this is more efficient.
-		inverseMoveTime = 1f / MoveTime;
 	}
-
-	void Update() { InAnimation = InAnimation && !animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"); }
 
 	//start movement and animation
-	public void StartTurnAnimation()
+	public void StartTurnAnimation() { StartCoroutine(TurnAnimationCoroutine(MoveTime)); }
+
+	private string GetAnimationNameForActionType(ActionType type)
 	{
-		MoveToPosition();
-		InAnimation = true;
+		switch (type)
+		{
+			case ActionType.Idle: return "unitIdle";
+			case ActionType.Move: return "unitWalk";
+			case ActionType.Evade: return "unitWalk";
+			case ActionType.Block: return "unitIdle";
+			case ActionType.Buildup: return "unitIdle";
+			case ActionType.Recover: return "unitIdle";
+			case ActionType.AttackSingleTile: return "unitAttack01";
+			case ActionType.Attack3Tiles: return "unitAttack01";
+			case ActionType.Attack5Tiles: return "unitAttack02";
+			case ActionType.AttackAllTiles: return "unitAttack02";
+			case ActionType.Rotate: return "unitIdle";
+			default:
+				throw new ArgumentOutOfRangeException("type", type, null);
+		}
 	}
 
-	//just plays animation
+	private IEnumerator TurnAnimationCoroutine(float seconds)
+	{
+		InAnimation = true;
+		animator.SetTrigger(GetAnimationNameForActionType(CurrentActionSequence.CurrentTurnActionAtom.Type));
+
+		float elapsedTime = 0;
+		var source = OccupiedTile.GlobalMidpointPosition;
+		var target = (MoveTarget ?? OccupiedTile).GlobalMidpointPosition;
+		while (elapsedTime < seconds)
+		{
+			transform.position = Vector3.Lerp(source, target, elapsedTime / seconds);
+			elapsedTime += Time.deltaTime;
+			yield return new WaitForEndOfFrame();
+		}
+
+		transform.position = target;
+		animator.SetTrigger("unitIdle");
+		InAnimation = false;
+	}
+
 	public void StartHitAnimation()
 	{
-		// TODO: trigger hit animation instead-> !after! switch to idle
-		// TODO STEVE: trigger hit animation
+		StartCoroutine(HitAnimationCoroutine(MoveTime));
+	}
+
+	private IEnumerator HitAnimationCoroutine(float seconds)
+	{
 		InAnimation = true;
+		// TODO STEVE: trigger hit animation here
+
+		float elapsedTime = 0;
+		while (elapsedTime < seconds)
+		{
+			elapsedTime += Time.deltaTime;
+			yield return new WaitForEndOfFrame();
+		}
+
+		animator.SetTrigger("unitIdle");
+		InAnimation = false;
 	}
 
 	public void GoToNextActionAtom()
@@ -101,59 +143,5 @@ public class Character : MonoBehaviour
 		OccupiedTile = tile;
 		OutermostGameObject.transform.position = tile.GlobalMidpointPosition;
 		return true;
-	}
-
-	private string GetAnimationNameForActionType(ActionType type)
-	{
-		switch (type)
-		{
-			case ActionType.Idle: return "unitIdle";
-			case ActionType.Move: return "unitWalk";
-			case ActionType.Roll: return "unitWalk";
-			case ActionType.Block: return "unitIdle";
-			case ActionType.Buildup: return "unitVictory";
-			case ActionType.Recover: return "unitVictory";
-			case ActionType.AttackSingleTile: return "unitAttack01";
-			case ActionType.Attack3Tiles: return "unitAttack01";
-			case ActionType.Attack5Tiles: return "unitAttack02";
-			case ActionType.AttackAllTiles: return "unitAttack02";
-			case ActionType.Rotate: return "unitIdle";
-			default:
-				throw new ArgumentOutOfRangeException("type", type, null);
-		}
-	}
-
-	private void MoveToPosition()
-	{
-		var endTile = MoveTarget ?? OccupiedTile;
-		//Calculate the remaining distance to move based on the square magnitude of the difference between current position and end parameter. 
-		//Square magnitude is used instead of magnitude because it's computationally cheaper.
-		float sqrRemainingDistance = (endTile.transform.position - endTile.GlobalMidpointPosition).sqrMagnitude;
-
-		//--start continuous animation
-		animator.SetTrigger(GetAnimationNameForActionType(CurrentActionSequence.CurrentTurnActionAtom.Type));
-
-		//While that distance is greater than a very small amount (Epsilon, almost zero):
-		while (sqrRemainingDistance > float.Epsilon)
-		{
-			//Find a new position proportionally closer to the end, based on the moveTime
-			Vector3 newPostion = Vector3.MoveTowards(
-				transform.position, endTile.GlobalMidpointPosition,
-				inverseMoveTime * Time.deltaTime
-			);
-
-			//Call MovePosition on attached Rigidbody2D and move it to the calculated position.
-			transform.Translate(newPostion);
-
-			//Recalculate the remaining distance after moving.
-			sqrRemainingDistance = (transform.position - endTile.GlobalMidpointPosition).sqrMagnitude;
-
-			Debug.Log("Moving");
-		}
-
-		//--end Animation
-		animator.SetTrigger("unitIdle");
-
-		Debug.Log("EndOfMovement");
 	}
 }
