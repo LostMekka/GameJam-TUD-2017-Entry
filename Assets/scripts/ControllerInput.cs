@@ -25,7 +25,7 @@ public class ControllerInput : MonoBehaviour
 		var angle = Mathf.Atan2(dy, dx);
 		var direction = (int) Mathf.Round(3 * angle / Mathf.PI);
 		var tile = Map.GetTileInDirection(Character.OccupiedTile, direction);
-		if (tile == null || !tile.IsWalkable || tile.CharacterStandingThere != null) return;
+		if (tile == null) return;
 
 		Select(tile);
 		if (Input.GetButtonDown("Fire1"))
@@ -36,12 +36,16 @@ public class ControllerInput : MonoBehaviour
 		{
 			ConfirmActionSequence(new ActionSequence(ActionDefinition.SimpleAttack, direction));
 		}
+		else if (Input.GetButtonDown("Fire3"))
+		{
+			ConfirmActionSequence(null);
+		}
 	}
 
 	private void ConfirmActionSequence(ActionSequence sequence)
 	{
 		// TODO: need to check if we can abort the current sequence
-		Character.CurrentActionSequence = sequence;
+		if (sequence != null) Character.CurrentActionSequence = sequence;
 		GameController.ExecuteNextTurn();
 	}
 
@@ -53,8 +57,7 @@ public class ControllerInput : MonoBehaviour
 
 	private void Unselect()
 	{
-		if (selectedTile == null) return;
-		selectedTile.ClearHighlight();
+		if (selectedTile != null) selectedTile.ClearHighlight();
 		selectedTile = null;
 	}
 }
