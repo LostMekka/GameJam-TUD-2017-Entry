@@ -7,7 +7,7 @@ public class Character : MonoBehaviour
 	public int MaxHealth = 100;
 	public int Stamina;
 	public int MaxStamina = 100;
-	public float moveTime = 0.1f;
+	public float MoveTime = 0.1f;
 	private float inverseMoveTime;
 
 	public ActionSequence CurrentActionSequence;
@@ -18,8 +18,6 @@ public class Character : MonoBehaviour
 	public GameObject ModelPrefab;
 	public GameObject OutermostGameObject;
 	private int direction;
-
-	private Transform unitTransform;
 
 	public int Direction
 	{
@@ -66,7 +64,7 @@ public class Character : MonoBehaviour
 
 
 		//By storing the reciprocal of the move time we can use it by multiplying instead of dividing, this is more efficient.
-		inverseMoveTime = 1f / moveTime;
+		inverseMoveTime = 1f / MoveTime;
 	}
 
 	void Update() { InAnimation = InAnimation && !animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"); }
@@ -74,7 +72,6 @@ public class Character : MonoBehaviour
 	//start movement and animation
 	public void StartTurnAnimation()
 	{
-		// TODO STEVE: fix animations
 		MoveToPosition();
 		InAnimation = true;
 	}
@@ -83,7 +80,7 @@ public class Character : MonoBehaviour
 	public void StartHitAnimation()
 	{
 		// TODO: trigger hit animation instead-> !after! switch to idle
-		animator.SetTrigger(GetAnimationNameForActionType(CurrentActionSequence.CurrentTurnActionAtom.Type));
+		// TODO STEVE: trigger hit animation
 		InAnimation = true;
 	}
 
@@ -128,7 +125,7 @@ public class Character : MonoBehaviour
 
 	private void MoveToPosition()
 	{
-		var endTile = MoveTarget;
+		var endTile = MoveTarget ?? OccupiedTile;
 		//Calculate the remaining distance to move based on the square magnitude of the difference between current position and end parameter. 
 		//Square magnitude is used instead of magnitude because it's computationally cheaper.
 		float sqrRemainingDistance = (endTile.transform.position - endTile.GlobalMidpointPosition).sqrMagnitude;
@@ -141,12 +138,12 @@ public class Character : MonoBehaviour
 		{
 			//Find a new position proportionally closer to the end, based on the moveTime
 			Vector3 newPostion = Vector3.MoveTowards(
-				unitTransform.position, endTile.GlobalMidpointPosition,
+				transform.position, endTile.GlobalMidpointPosition,
 				inverseMoveTime * Time.deltaTime
 			);
 
 			//Call MovePosition on attached Rigidbody2D and move it to the calculated position.
-			unitTransform.Translate(endTile.GlobalMidpointPosition);
+			transform.Translate(endTile.GlobalMidpointPosition);
 
 			//Recalculate the remaining distance after moving.
 			sqrRemainingDistance = (transform.position - endTile.GlobalMidpointPosition).sqrMagnitude;
