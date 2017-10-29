@@ -8,7 +8,7 @@ public class Character : MonoBehaviour
 	public int MaxHealth = 100;
 	public int Stamina;
 	public int MaxStamina = 100;
-	public float MoveTime = 1f;
+	public float MoveTime = 10f;
 
 	public ActionSequence CurrentActionSequence;
 	public TileInfo OccupiedTile;
@@ -36,7 +36,7 @@ public class Character : MonoBehaviour
 	public string CurrentActionSequenceName { get { return CurrentActionSequence.Name; } }
 	public bool IsDead { get { return Health <= 0; } }
 
-	public TileInfo MoveTarget
+	public TileInfo MovementTarget
 	{
 		get
 		{
@@ -62,7 +62,14 @@ public class Character : MonoBehaviour
 		animator = GetComponentInChildren<Animator>();
 	}
 
-	//start movement and animation
+	public void UpdateDirectionBasedOnActionSequence()
+	{
+		if (CurrentActionSequence.DirectionOverride != null && CurrentActionSequence.CurrentTurnIndex == 0)
+		{
+			Direction = CurrentActionSequence.DirectionOverride.Value;
+		}
+	}
+
 	public void StartTurnAnimation() { StartCoroutine(TurnAnimationCoroutine(MoveTime)); }
 
 	private string GetAnimationNameForActionType(ActionType type)
@@ -91,24 +98,26 @@ public class Character : MonoBehaviour
 		animator.SetTrigger(GetAnimationNameForActionType(CurrentActionSequence.CurrentTurnActionAtom.Type));
 
 		float elapsedTime = 0;
-		var source = OccupiedTile.GlobalMidpointPosition;
-		var target = (MoveTarget ?? OccupiedTile).GlobalMidpointPosition;
+		var source = OccupiedTile;
+		var target = MovementTarget ?? OccupiedTile;
+
 		while (elapsedTime < seconds)
 		{
-			transform.position = Vector3.Lerp(source, target, elapsedTime / seconds);
+			OutermostGameObject.transform.position = Vector3.Lerp(
+				source.GlobalMidpointPosition,
+				target.GlobalMidpointPosition,
+				elapsedTime / seconds
+			);
 			elapsedTime += Time.deltaTime;
 			yield return new WaitForEndOfFrame();
 		}
 
-		transform.position = target;
+		OutermostGameObject.transform.position = target.GlobalMidpointPosition;
 		animator.SetTrigger("unitIdle");
 		InAnimation = false;
 	}
 
-	public void StartHitAnimation()
-	{
-		StartCoroutine(HitAnimationCoroutine(MoveTime));
-	}
+	public void StartHitAnimation() { StartCoroutine(HitAnimationCoroutine(MoveTime)); }
 
 	private IEnumerator HitAnimationCoroutine(float seconds)
 	{
