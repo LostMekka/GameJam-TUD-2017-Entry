@@ -110,11 +110,11 @@ public class Map : MonoBehaviour
 		var tile = Instantiate(prefab);
 		tile.transform.parent = transform;
 		tile.transform.localPosition = GetTilePosition(x, y);
-		var tile = tile.GetComponent<TileInfo>();
-		this[x, y] = tile;
-		tile.X = x;
-		tile.Y = y;
-		tile.Map = this;
+		var tileInfo = tile.GetComponent<TileInfo>();
+		this[x, y] = tileInfo;
+		tileInfo.X = x;
+		tileInfo.Y = y;
+		tileInfo.Map = this;
 	}
 
 	private Vector3 GetTilePosition(int x, int y)
