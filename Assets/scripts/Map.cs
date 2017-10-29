@@ -63,6 +63,8 @@ public class Map : MonoBehaviour
 			}
 		}
 		CreateTileLinks();
+		var midPosition = GetTilePosition(GeneratedSize / 2 - 1, GeneratedSize / 2 - 1);
+		transform.position = new Vector3(-midPosition.x, 0, -midPosition.z);
 	}
 
 	private void CreateTileLinks()
