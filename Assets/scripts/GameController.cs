@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour
 	public Map Map;
 
 
-	private readonly List<Character> registeredCharacters = new List<Character>();
+	private List<Character> registeredCharacters = new List<Character>();
 	private State state = State.Input;
 
 
@@ -43,6 +43,20 @@ public class GameController : MonoBehaviour
 		switch (state)
 		{
 			case State.Input:
+				var newList = new List<Character>();
+				foreach (var character in registeredCharacters)
+				{
+					if (character.IsDead)
+					{
+						Destroy(character.OutermostGameObject);
+					}
+					else
+					{
+						newList.Add(character);
+					}
+				}
+				registeredCharacters = newList;
+
 				if (registeredCharacters.Count > 0 && EveryCharacterFinishedInput)
 				{
 					foreach (var character in registeredCharacters)
@@ -130,7 +144,7 @@ public class GameController : MonoBehaviour
 		foreach (var character in registeredCharacters)
 		{
 			// TODO: get this from character
-			var damageAmount = 30;
+			var damageAmount = 75;
 			switch (character.CurrentActionSequence.CurrentTurnActionAtom.Type)
 			{
 				case ActionType.AttackSingleTile:
