@@ -451,9 +451,8 @@ MonoBehaviour:
   MaxHealth: 100
   Stamina: 100
   MaxStamina: 100
-  MoveTime: 10
+  MoveTime: 0.2
   OccupiedTile: {fileID: 0}
-  InAnimation: 0
   ModelScale: 1
   ModelPrefab: {fileID: 100048, guid: 272ec112bddec644a8af6599107e74f7, type: 2}
   OutermostGameObject: {fileID: 0}

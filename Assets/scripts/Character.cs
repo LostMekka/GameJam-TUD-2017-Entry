@@ -18,10 +18,10 @@ public class Character : MonoBehaviour
 	public int MaxHealth = 100;
 	public int Stamina;
 	public int MaxStamina = 100;
-	public float MoveTime = 10f;
+	public float MoveTime = 1f;
 
-	public ActionSequence CurrentActionSequence;
 	public TileInfo OccupiedTile;
+	public ActionSequence CurrentActionSequence { get; private set; } 
 	public bool IsWaitingForAnimation { get; private set; }
 	public bool IsWaitingForInput { get; private set; }
 	public OnInputRequired OnInputRequiredCallback;
@@ -73,6 +73,7 @@ public class Character : MonoBehaviour
 	// Use this for initialization
 	public void Start()
 	{
+		if (CurrentActionSequence == null) CurrentActionSequence = new ActionSequence(ActionDefinition.Idle);
 		model = Instantiate(ModelPrefab);
 		model.transform.localScale = new Vector3(ModelScale, ModelScale, ModelScale);
 		model.transform.parent = gameObject.transform;

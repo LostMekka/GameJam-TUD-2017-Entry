@@ -590,17 +590,13 @@ MonoBehaviour:
   MaxHealth: 100
   Stamina: 100
   MaxStamina: 100
-  MoveTime: 10
-
+  MoveTime: 0.2
   OccupiedTile: {fileID: 0}
-  InAnimation: 0
   ModelScale: 1
   ModelPrefab: {fileID: 0}
-
   OutermostGameObject: {fileID: 0}
   ParticleEffect: {fileID: 1896160682232064, guid: e9a1f4473116daf48bb70f497ee7532c,
     type: 2}
-
 --- !u!114 &114566279484936856
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -666,8 +662,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b653890e58913674a9dacfe776642f74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: {fileID: 0}
-  map: {fileID: 0}
+  Map: {fileID: 0}
+  GameController: {fileID: 0}
+  InputActive: 0
 --- !u!114 &114959349750819684
 MonoBehaviour:
   m_ObjectHideFlags: 1

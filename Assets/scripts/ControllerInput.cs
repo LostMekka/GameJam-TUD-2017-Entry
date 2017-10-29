@@ -18,6 +18,11 @@ public class ControllerInput : MonoBehaviour, IInputScript
 			throw new Exception("controller input not initialized");
 		Unselect();
 		if (!InputActive) return;
+		if (Input.GetButtonDown("Fire3"))
+		{
+			EndInputPhase();
+			return;
+		}
 
 		var dx = Input.GetAxis("Horizontal");
 		var dy = Input.GetAxis("Vertical");
@@ -36,10 +41,6 @@ public class ControllerInput : MonoBehaviour, IInputScript
 		else if (Input.GetButtonDown("Fire2"))
 		{
 			EndInputPhase(new ActionSequence(ActionDefinition.SimpleAttack, direction));
-		}
-		else if (Input.GetButtonDown("Fire3"))
-		{
-			EndInputPhase();
 		}
 	}
 
