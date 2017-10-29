@@ -1,5 +1,4 @@
 ﻿using System;
-using DefaultNamespace;
 using UnityEngine;
 
 public class ControllerInput : MonoBehaviour, IInputScript
@@ -44,7 +43,7 @@ public class ControllerInput : MonoBehaviour, IInputScript
 		}
 	}
 
-	public void BeginInputPhase() { InputActive = true; }
+	public void OnRequestInput() { InputActive = true; }
 
 	public void EndInputPhase(ActionSequence desiredActionSequence = null)
 	{

@@ -185,7 +185,7 @@ public class Character : MonoBehaviour
 		}
 	}
 
-	public void OnFinishedInput(ActionSequence requestedActionSequence)
+	public void OnFinishedInput(ActionSequence requestedActionSequence = null)
 	{
 		// TODO: do not change sequence if it is not abortable
 		if (requestedActionSequence != null) CurrentActionSequence = requestedActionSequence;

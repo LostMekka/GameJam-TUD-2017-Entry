@@ -108,7 +108,7 @@ public class GameController : MonoBehaviour
 				controllerInput.Character = character;
 				controllerInput.Map = Map;
 				controllerInput.GameController = this;
-				character.OnInputRequiredCallback = controllerInput.BeginInputPhase;
+				character.OnInputRequiredCallback = controllerInput.OnRequestInput;
 				break;
 			case Character.InputType.Computer:
 				// TODO STEFAN: add AI input component to character
