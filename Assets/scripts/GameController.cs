@@ -34,7 +34,8 @@ public class GameController : MonoBehaviour
 
 
 	public bool AllowsInput { get { return state == State.Input; } }
-	private bool EveryCharacterIsIdle { get { return registeredCharacters.All(c => !c.InAnimation); } }
+	private bool EveryCharacterIsIdle { get { return registeredCharacters.All(c => !c.IsWaitingForAnimation); } }
+	private bool EveryCharacterFinishedInput { get { return registeredCharacters.All(c => !c.IsWaitingForInput); } }
 
 
 	private void Update()
@@ -42,25 +43,30 @@ public class GameController : MonoBehaviour
 		switch (state)
 		{
 			case State.Input:
-				// nothing to do
+				if (registeredCharacters.Count > 0 && EveryCharacterFinishedInput)
+				{
+					foreach (var character in registeredCharacters)
+					{
+						character.UpdateDirectionBasedOnActionSequence();
+						character.StartTurnAnimation();
+					}
+					state = State.TurnAnimations;
+				}
 				break;
 			case State.TurnAnimations:
 				if (EveryCharacterIsIdle)
 				{
 					var charactersHit = CalculateNextGameState();
-					foreach (var character in charactersHit)
-					{
-						character.GoToNextActionAtom();
-						character.StartHitAnimation();
-					}
+					foreach (var character in charactersHit) character.StartHitAnimation();
+					foreach (var character in registeredCharacters) character.GoToNextActionAtom();
 					state = State.HitAnimations;
 				}
 				break;
 			case State.HitAnimations:
 				if (EveryCharacterIsIdle)
 				{
+					foreach (var character in registeredCharacters) character.RequestInput();
 					state = State.Input;
-					// TODO: inform input scripts or something like that??
 				}
 				break;
 			default:
@@ -68,7 +74,7 @@ public class GameController : MonoBehaviour
 		}
 	}
 
-	public Character CreateCharacter(GameObject prefab, int xPos, int yPos)
+	public Character CreateCharacter(GameObject prefab, int xPos, int yPos, Character.InputType inputType)
 	{
 		var instance = Instantiate(prefab);
 		var character = instance.GetComponentInChildren<Character>();
@@ -92,9 +98,27 @@ public class GameController : MonoBehaviour
 		instance.transform.position = targetTile.GlobalMidpointPosition;
 		registeredCharacters.Add(character);
 
-		var bar = character.gameObject.AddComponent<ActionBar>();
-		bar.character = character;
-		
+		if ( gameObject.transform.GetChild( i ).gameObject.name == "action" )
+		switch (inputType)
+		{
+			case Character.InputType.None:
+				// nothing to add
+				break;
+			case Character.InputType.Human:
+				var controllerInput = character.gameObject.AddComponent<ControllerInput>();
+				controllerInput.Character = character;
+				controllerInput.Map = Map;
+				controllerInput.GameController = this;
+				character.OnInputRequiredCallback = controllerInput.BeginInputPhase;
+				break;
+			case Character.InputType.Computer:
+				// TODO STEFAN: add AI input component to character
+				break;
+			default:
+				throw new ArgumentOutOfRangeException("inputType", inputType, null);
+		}
+
+		if (state == State.Input) character.RequestInput();
 		return character;
 	}
 
@@ -173,15 +197,5 @@ public class GameController : MonoBehaviour
 			var endTile = Map.GetTileInDirection(startTile, globalDirection);
 			if (endTile != null) targetList.Add(new DamageEvent(startTile, endTile, damageAmount));
 		}
-	}
-
-	public void ExecuteNextTurn()
-	{
-		foreach (var character in registeredCharacters)
-		{
-			character.UpdateDirectionBasedOnActionSequence();
-			character.StartTurnAnimation();
-		}
-		state = State.TurnAnimations;
 	}
 }

@@ -16,24 +16,20 @@ public class Map : MonoBehaviour
 	public GameObject PlayerPrefab;
 	public GameObject EnemyPrefab;
 	public GameController GameController;
-	public Character Player;
 
 	private readonly Dictionary<int, TileInfo> tiles = new Dictionary<int, TileInfo>();
 	private readonly float hexInnerRadiusMultiplier = (float) Math.Sqrt(3) / 2f;
 	private const int MaxMapSize = 9999;
 
 
-	void Start()
+	public Character PlayerCharacter { get; set; }
+
+
+	public void Start()
 	{
 		GameController = FindObjectOfType<GameController>();
-
 		GenerateNewMap();
-
-		Player = GameController.CreateCharacter(PlayerPrefab, 4, 4);
-		var controllerInput = Player.gameObject.AddComponent<ControllerInput>();
-		controllerInput.Character = Player;
-		controllerInput.Map = this;
-		controllerInput.GameController = GameController;
+		PlayerCharacter = GameController.CreateCharacter(PlayerPrefab, 4, 4, Character.InputType.Human);
 		
 		// place a predefined amount of enemies
 		var count = EnemiesToPlace;
@@ -45,9 +41,9 @@ public class Map : MonoBehaviour
 			var posX = (int) (GeneratedSize * Random.value);
 			var posY = (int) (GeneratedSize * Random.value);
 			
-			if (controllerInput.Map[posX, posY].CanWalkTo == true)
+			if (this[posX, posY].CanWalkTo == true)
 			{
-				var Enemy = GameController.CreateCharacter(EnemyPrefab, posX, posY);
+				var Enemy = GameController.CreateCharacter(EnemyPrefab, posX, posY,Character.InputType.Computer);
 				--count;
 			}
 
