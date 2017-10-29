@@ -98,7 +98,6 @@ public class GameController : MonoBehaviour
 		instance.transform.position = targetTile.GlobalMidpointPosition;
 		registeredCharacters.Add(character);
 
-		if ( gameObject.transform.GetChild( i ).gameObject.name == "action" )
 		switch (inputType)
 		{
 			case Character.InputType.None:
