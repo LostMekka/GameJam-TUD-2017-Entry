@@ -14,6 +14,7 @@ public class TileInfo : MonoBehaviour
 
 
 	public bool Highlighted { get { return meshRenderer.material.color == defaultColor; } }
+	public bool CanWalkTo { get { return IsWalkable && CharacterStandingThere == null; } }
 
 
 	public List<TileInfo> Neighbours { get { return neighbours; } }
