@@ -127,7 +127,7 @@ public class GameController : MonoBehaviour
 		{
 			var atom = character.CurrentActionSequence.CurrentTurnActionAtom;
 			var currTile = character.OccupiedTile;
-			var moveTarget = atom.Type == ActionType.Move || atom.Type == ActionType.Roll
+			var moveTarget = atom.Type == ActionType.Move || atom.Type == ActionType.Evade
 				? Map.GetTileInDirection(currTile, character.Direction + atom.DirectionOffset)
 				: null;
 			Debug.Log("name: " + character.CurrentActionSequenceName);
@@ -139,7 +139,7 @@ public class GameController : MonoBehaviour
 			{
 				if (damageEvent.Target != currTile && damageEvent.Target != moveTarget) continue;
 				// evade: rolling characters are invulvnerable
-				if (atom.Type == ActionType.Roll) continue;
+				if (atom.Type == ActionType.Evade) continue;
 				// block: blocking characters ignore damage from the 3 tiles in front of them
 				if (atom.Type == ActionType.Block)
 				{

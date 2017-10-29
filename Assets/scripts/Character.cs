@@ -37,7 +37,7 @@ public class Character : MonoBehaviour
 		get
 		{
 			var atom = CurrentActionSequence.CurrentTurnActionAtom;
-			return atom.Type == ActionType.Move || atom.Type == ActionType.Roll
+			return atom.Type == ActionType.Move || atom.Type == ActionType.Evade
 				? OccupiedTile.GetTileInDirection(Direction + atom.DirectionOffset)
 				: null;
 		}
@@ -109,10 +109,10 @@ public class Character : MonoBehaviour
 		{
 			case ActionType.Idle: return "unitIdle";
 			case ActionType.Move: return "unitWalk";
-			case ActionType.Roll: return "unitWalk";
+			case ActionType.Evade: return "unitWalk";
 			case ActionType.Block: return "unitIdle";
-			case ActionType.Buildup: return "unitVictory";
-			case ActionType.Recover: return "unitVictory";
+			case ActionType.Buildup: return "unitIdle";
+			case ActionType.Recover: return "unitIdle";
 			case ActionType.AttackSingleTile: return "unitAttack01";
 			case ActionType.Attack3Tiles: return "unitAttack01";
 			case ActionType.Attack5Tiles: return "unitAttack02";
