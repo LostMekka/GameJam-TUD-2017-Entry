@@ -90,6 +90,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4836906792294414}
   - component: {fileID: 114556057658155138}
+  - component: {fileID: 114918659176408508}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -590,13 +591,16 @@ MonoBehaviour:
   Stamina: 100
   MaxStamina: 100
   MoveTime: 10
+
   OccupiedTile: {fileID: 0}
   InAnimation: 0
   ModelScale: 1
   ModelPrefab: {fileID: 0}
+
   OutermostGameObject: {fileID: 0}
   ParticleEffect: {fileID: 1896160682232064, guid: e9a1f4473116daf48bb70f497ee7532c,
     type: 2}
+
 --- !u!114 &114566279484936856
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -651,6 +655,19 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 0
+--- !u!114 &114918659176408508
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1395228606657764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b653890e58913674a9dacfe776642f74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 0}
+  map: {fileID: 0}
 --- !u!114 &114959349750819684
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -662,6 +679,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8ff7290c8a40c45a780641ae1375b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameController: {fileID: 0}
+  txt: {fileID: 0}
+  c: 0
 --- !u!114 &114982397514774404
 MonoBehaviour:
   m_ObjectHideFlags: 1

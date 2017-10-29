@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
 public class Map : MonoBehaviour
 {
 	public int GeneratedSize = 10;
+	public int EnemiesToPlace = 10;
 	public float TileRadius = 1f;
 	public float TileGap;
 	public float WallProbability = 0.1f;
@@ -13,6 +14,7 @@ public class Map : MonoBehaviour
 	public GameObject FloorTilePrefab;
 	public GameObject WallTilePrefab;
 	public GameObject PlayerPrefab;
+	public GameObject EnemyPrefab;
 	public GameController GameController;
 
 	private readonly Dictionary<int, TileInfo> tiles = new Dictionary<int, TileInfo>();
@@ -28,6 +30,25 @@ public class Map : MonoBehaviour
 		GameController = FindObjectOfType<GameController>();
 		GenerateNewMap();
 		PlayerCharacter = GameController.CreateCharacter(PlayerPrefab, 4, 4, Character.InputType.Human);
+		
+		// place a predefined amount of enemies
+		var count = EnemiesToPlace;
+		var tries = EnemiesToPlace * 10; // make sure we do not loop forever
+
+		while (count > 0 && tries > 0)
+		{
+			var Random = new Random();
+			var posX = (int) (GeneratedSize * Random.value);
+			var posY = (int) (GeneratedSize * Random.value);
+			
+			if (this[posX, posY].CanWalkTo == true)
+			{
+				var Enemy = GameController.CreateCharacter(EnemyPrefab, posX, posY,Character.InputType.Computer);
+				--count;
+			}
+
+			--tries;
+		}
 	}
 
 	public TileInfo this[int x, int y]
@@ -55,6 +76,7 @@ public class Map : MonoBehaviour
 					? WallTilePrefab
 					: FloorTilePrefab;
 				CreateTileFromPrefab(prefab, x, y);
+				
 			}
 		}
 		CreateTileLinks();
