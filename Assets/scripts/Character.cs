@@ -62,7 +62,7 @@ public class Character : MonoBehaviour
 
 
 	// Use this for initialization
-	void Start()
+	public void Start()
 	{
 		model = Instantiate(ModelPrefab);
 		model.transform.localScale = new Vector3(ModelScale, ModelScale, ModelScale);
