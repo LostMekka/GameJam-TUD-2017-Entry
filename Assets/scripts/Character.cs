@@ -22,6 +22,7 @@ public class Character : MonoBehaviour
 	private GameObject model;
 	private Animator animator;
 
+    public GameObject ParticleEffect;
 
 	public int Direction
 	{
@@ -122,17 +123,24 @@ public class Character : MonoBehaviour
 	private IEnumerator HitAnimationCoroutine(float seconds)
 	{
 		InAnimation = true;
-		// TODO STEVE: trigger hit animation here
+        animator.SetTrigger("unitHit");
 
-		float elapsedTime = 0;
+
+        //---- on hit effect
+        GameObject newHitEffect = Instantiate(ParticleEffect);
+        Destroy(newHitEffect,2.5f);
+        //------
+
+        float elapsedTime = 0;
 		while (elapsedTime < seconds)
 		{
 			elapsedTime += Time.deltaTime;
 			yield return new WaitForEndOfFrame();
 		}
-
-		animator.SetTrigger("unitIdle");
-		InAnimation = false;
+        /*
+		animator.SetTrigger("unitIdle");   //<<<<< not needed since Hit goes aoutmatically back to idle
+        */
+        InAnimation = false;
 	}
 
 	public void GoToNextActionAtom()
