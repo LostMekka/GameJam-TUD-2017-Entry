@@ -8,7 +8,7 @@ public class Character : MonoBehaviour
 	public int MaxHealth = 100;
 	public int Stamina;
 	public int MaxStamina = 100;
-	public float MoveTime = 1f;
+	public float MoveTime = 10f;
 
 	public ActionSequence CurrentActionSequence;
 	public TileInfo OccupiedTile;
@@ -98,16 +98,21 @@ public class Character : MonoBehaviour
 		animator.SetTrigger(GetAnimationNameForActionType(CurrentActionSequence.CurrentTurnActionAtom.Type));
 
 		float elapsedTime = 0;
-		var source = OccupiedTile.GlobalMidpointPosition;
-		var target = (MovementTarget ?? OccupiedTile).GlobalMidpointPosition;
+		var source = OccupiedTile;
+		var target = MovementTarget ?? OccupiedTile;
+
 		while (elapsedTime < seconds)
 		{
-			transform.position = Vector3.Lerp(source, target, elapsedTime / seconds);
+			OutermostGameObject.transform.position = Vector3.Lerp(
+				source.GlobalMidpointPosition,
+				target.GlobalMidpointPosition,
+				elapsedTime / seconds
+			);
 			elapsedTime += Time.deltaTime;
 			yield return new WaitForEndOfFrame();
 		}
 
-		transform.position = target;
+		OutermostGameObject.transform.position = target.GlobalMidpointPosition;
 		animator.SetTrigger("unitIdle");
 		InAnimation = false;
 	}

@@ -47,9 +47,7 @@ public class GameController : MonoBehaviour
 			case State.TurnAnimations:
 				if (EveryCharacterIsIdle)
 				{
-					Debug.Log("game controller starts state calculation");
 					var charactersHit = CalculateNextGameState();
-					Debug.Log("game controller starts hit animations");
 					foreach (var character in charactersHit)
 					{
 						character.GoToNextActionAtom();
@@ -61,7 +59,6 @@ public class GameController : MonoBehaviour
 			case State.HitAnimations:
 				if (EveryCharacterIsIdle)
 				{
-					Debug.Log("game controller starts input phase");
 					state = State.Input;
 					// TODO: inform input scripts or something like that??
 				}
@@ -130,8 +127,6 @@ public class GameController : MonoBehaviour
 			var moveTarget = atom.Type == ActionType.Move || atom.Type == ActionType.Evade
 				? Map.GetTileInDirection(currTile, character.Direction + atom.DirectionOffset)
 				: null;
-			Debug.Log("name: " + character.CurrentActionSequenceName);
-			Debug.Log(moveTarget == null ? "target: null" : "target: " + moveTarget.X + ", " + moveTarget.Y);
 			if (moveTarget != null) character.MoveToTile(moveTarget);
 
 			var damageTaken = 0;
@@ -176,14 +171,8 @@ public class GameController : MonoBehaviour
 		}
 	}
 
-	public void RegisterCharacter(Character character)
-	{
-		if (!registeredCharacters.Contains(character)) registeredCharacters.Add(character);
-	}
-
 	public void ExecuteNextTurn()
 	{
-		Debug.Log("game controller starts turn animations");
 		foreach (var character in registeredCharacters)
 		{
 			character.UpdateDirectionBasedOnActionSequence();
