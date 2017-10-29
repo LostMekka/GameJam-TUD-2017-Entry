@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
+	public enum InputType
+	{
+		None,
+		Human,
+		Computer,
+	}
+
+
+	public delegate void OnInputRequired();
+
 	public int Health;
 	public int MaxHealth = 100;
 	public int Stamina;
@@ -12,7 +22,9 @@ public class Character : MonoBehaviour
 
 	public ActionSequence CurrentActionSequence;
 	public TileInfo OccupiedTile;
-	public bool InAnimation;
+	public bool IsWaitingForAnimation { get; private set; }
+	public bool IsWaitingForInput { get; private set; }
+	public OnInputRequired OnInputRequiredCallback;
 
 	public float ModelScale = 1;
 	public GameObject ModelPrefab;
@@ -94,7 +106,7 @@ public class Character : MonoBehaviour
 
 	private IEnumerator TurnAnimationCoroutine(float seconds)
 	{
-		InAnimation = true;
+		IsWaitingForAnimation = true;
 		animator.SetTrigger(GetAnimationNameForActionType(CurrentActionSequence.CurrentTurnActionAtom.Type));
 
 		float elapsedTime = 0;
@@ -114,14 +126,14 @@ public class Character : MonoBehaviour
 
 		OutermostGameObject.transform.position = target.GlobalMidpointPosition;
 		animator.SetTrigger("unitIdle");
-		InAnimation = false;
+		IsWaitingForAnimation = false;
 	}
 
 	public void StartHitAnimation() { StartCoroutine(HitAnimationCoroutine(MoveTime)); }
 
 	private IEnumerator HitAnimationCoroutine(float seconds)
 	{
-		InAnimation = true;
+		IsWaitingForAnimation = true;
 		// TODO STEVE: trigger hit animation here
 
 		float elapsedTime = 0;
@@ -132,7 +144,7 @@ public class Character : MonoBehaviour
 		}
 
 		animator.SetTrigger("unitIdle");
-		InAnimation = false;
+		IsWaitingForAnimation = false;
 	}
 
 	public void GoToNextActionAtom()
@@ -152,5 +164,25 @@ public class Character : MonoBehaviour
 		OccupiedTile = tile;
 		OutermostGameObject.transform.position = tile.GlobalMidpointPosition;
 		return true;
+	}
+
+	public void RequestInput()
+	{
+		if (OnInputRequiredCallback != null)
+		{
+			OnInputRequiredCallback();
+			IsWaitingForInput = true;
+		}
+		else
+		{
+			IsWaitingForInput = false;
+		}
+	}
+
+	public void OnFinishedInput(ActionSequence requestedActionSequence)
+	{
+		// TODO: do not change sequence if it is not abortable
+		if (requestedActionSequence != null) CurrentActionSequence = requestedActionSequence;
+		IsWaitingForInput = false;
 	}
 }

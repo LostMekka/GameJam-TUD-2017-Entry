@@ -13,26 +13,21 @@ public class Map : MonoBehaviour
 	public GameObject FloorTilePrefab;
 	public GameObject WallTilePrefab;
 	public GameObject PlayerPrefab;
-
 	public GameController GameController;
-	public Character Player;
 
 	private readonly Dictionary<int, TileInfo> tiles = new Dictionary<int, TileInfo>();
 	private readonly float hexInnerRadiusMultiplier = (float) Math.Sqrt(3) / 2f;
 	private const int MaxMapSize = 9999;
 
 
-	void Start()
+	public Character PlayerCharacter { get; set; }
+
+
+	public void Start()
 	{
 		GameController = FindObjectOfType<GameController>();
-
 		GenerateNewMap();
-
-		Player = GameController.CreateCharacter(PlayerPrefab, 4, 4);
-		var controllerInput = Player.gameObject.AddComponent<ControllerInput>();
-		controllerInput.Character = Player;
-		controllerInput.Map = this;
-		controllerInput.GameController = GameController;
+		PlayerCharacter = GameController.CreateCharacter(PlayerPrefab, 4, 4, Character.InputType.Human);
 	}
 
 	public TileInfo this[int x, int y]
