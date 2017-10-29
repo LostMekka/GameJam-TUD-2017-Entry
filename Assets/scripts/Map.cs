@@ -114,6 +114,7 @@ public class Map : MonoBehaviour
 		this[x, y] = tileInfo;
 		tileInfo.X = x;
 		tileInfo.Y = y;
+		tileInfo.Map = this;
 	}
 
 	private Vector3 GetTilePosition(int x, int y)
