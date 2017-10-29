@@ -127,9 +127,7 @@ public class GameController : MonoBehaviour
 		{
 			var atom = character.CurrentActionSequence.CurrentTurnActionAtom;
 			var currTile = character.OccupiedTile;
-			var moveTarget = atom.Type == ActionType.Move || atom.Type == ActionType.Roll
-				? Map.GetTileInDirection(currTile, character.Direction + atom.DirectionOffset)
-				: null;
+			var moveTarget = character.MoveTarget;
 			Debug.Log("name: " + character.CurrentActionSequenceName);
 			Debug.Log(moveTarget == null ? "target: null" : "target: " + moveTarget.X + ", " + moveTarget.Y);
 			if (moveTarget != null) character.MoveToTile(moveTarget);
