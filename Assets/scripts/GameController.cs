@@ -186,11 +186,7 @@ public class GameController : MonoBehaviour
 		Debug.Log("game controller starts turn animations");
 		foreach (var character in registeredCharacters)
 		{
-			var actionSequence = character.CurrentActionSequence;
-			if (actionSequence.DirectionOverride != null && actionSequence.CurrentTurnIndex == 0)
-			{
-				character.Direction = actionSequence.DirectionOverride.Value;
-			}
+			character.UpdateDirectionBasedOnActionSequence();
 			character.StartTurnAnimation();
 		}
 		state = State.TurnAnimations;

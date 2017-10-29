@@ -36,7 +36,7 @@ public class Character : MonoBehaviour
 	public string CurrentActionSequenceName { get { return CurrentActionSequence.Name; } }
 	public bool IsDead { get { return Health <= 0; } }
 
-	public TileInfo MoveTarget
+	public TileInfo MovementTarget
 	{
 		get
 		{
@@ -62,7 +62,14 @@ public class Character : MonoBehaviour
 		animator = GetComponentInChildren<Animator>();
 	}
 
-	//start movement and animation
+	public void UpdateDirectionBasedOnActionSequence()
+	{
+		if (CurrentActionSequence.DirectionOverride != null && CurrentActionSequence.CurrentTurnIndex == 0)
+		{
+			Direction = CurrentActionSequence.DirectionOverride.Value;
+		}
+	}
+
 	public void StartTurnAnimation() { StartCoroutine(TurnAnimationCoroutine(MoveTime)); }
 
 	private string GetAnimationNameForActionType(ActionType type)
@@ -92,7 +99,7 @@ public class Character : MonoBehaviour
 
 		float elapsedTime = 0;
 		var source = OccupiedTile.GlobalMidpointPosition;
-		var target = (MoveTarget ?? OccupiedTile).GlobalMidpointPosition;
+		var target = (MovementTarget ?? OccupiedTile).GlobalMidpointPosition;
 		while (elapsedTime < seconds)
 		{
 			transform.position = Vector3.Lerp(source, target, elapsedTime / seconds);
@@ -105,10 +112,7 @@ public class Character : MonoBehaviour
 		InAnimation = false;
 	}
 
-	public void StartHitAnimation()
-	{
-		StartCoroutine(HitAnimationCoroutine(MoveTime));
-	}
+	public void StartHitAnimation() { StartCoroutine(HitAnimationCoroutine(MoveTime)); }
 
 	private IEnumerator HitAnimationCoroutine(float seconds)
 	{
